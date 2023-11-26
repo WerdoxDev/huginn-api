@@ -1,5 +1,5 @@
 import { RESTOptions, ResponseLike } from "$shared/rest-types";
-import { STATUS_CODES } from "http";
+// import { STATUS_CODES } from "https";
 
 export const DefaultRestOptions = {
    api: "http://localhost:3000",
@@ -28,7 +28,7 @@ async function defaultMakeRequest(url: string, init: RequestInit): Promise<Respo
       },
       headers: response.headers,
       status: response.status,
-      statusText: STATUS_CODES[response.status]!,
+      statusText: response.statusText,
       ok: response.status >= 200 && response.status < 300,
    };
 }

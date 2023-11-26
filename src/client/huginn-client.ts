@@ -4,12 +4,14 @@ import { REST } from "../rest/rest";
 import { APIUser } from "$shared/api-types";
 import { UserAPI } from "../user/users-api";
 import { AuthAPI } from "../user/auth-api";
+import { CommonAPI } from "../user/common-api";
 
 export class HuginnClient {
    public readonly options: ClientOptions;
    private rest: REST;
    public users: UserAPI;
    public auth: AuthAPI;
+   public common: CommonAPI;
 
    private token?: string;
    private refreshToken?: string;
@@ -27,6 +29,7 @@ export class HuginnClient {
 
       this.users = new UserAPI(this.rest);
       this.auth = new AuthAPI(this.rest);
+      this.common = new CommonAPI(this.rest);
    }
 
    async login(credentials: LoginCredentials) {
