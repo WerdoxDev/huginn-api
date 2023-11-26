@@ -1,4 +1,4 @@
-import { RESTOptions, ResponseLike } from "$shared/rest-types";
+import { RESTOptions, ResponseLike } from "@shared/rest-types";
 // import { STATUS_CODES } from "https";
 
 export const DefaultRestOptions = {

@@ -7,9 +7,9 @@ import {
    RequestMethod,
    ResolvedRequest,
    ResponseLike,
-} from "$shared/rest-types";
-import { RouteLike } from "$shared/types";
-import { HuginnErrorData } from "$shared/errors";
+} from "@shared/rest-types";
+import { RouteLike } from "@shared/types";
+import { HuginnErrorData } from "@shared/errors";
 import { HTTPError } from "../errors/http-error";
 import { HuginnAPIError } from "../errors/huginn-error";
 import { parseResponse } from "../utils";

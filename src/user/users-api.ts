@@ -1,12 +1,12 @@
-import { Snowflake } from "$shared/types";
+import { Snowflake } from "@shared/types";
 import { REST } from "../rest/rest";
-import { Routes } from "$shared/routes";
+import { Routes } from "@shared/routes";
 import {
    APIGetCurrentUserResult,
    APIGetUserResult,
    APIPatchCurrentUserJSONBody,
    APIPatchCurrentUserResult,
-} from "$shared/api-types";
+} from "@shared/api-types";
 
 export class UserAPI {
    private readonly rest: REST;

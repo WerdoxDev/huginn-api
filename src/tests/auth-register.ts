@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { HuginnClient } from "../client/huginn-client";
-import { RegisterUser } from "$shared/client-types";
+import { RegisterUser } from "@shared/client-types";
 
 describe("auth-register", () => {
    test("auth-register-invalid-body", async () => {

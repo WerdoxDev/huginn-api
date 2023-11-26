@@ -1,5 +1,5 @@
-import { InternalRequest } from "$shared/rest-types";
-import { HuginnError, HuginnErrorData, HuginnErrorGroupWrapper, RequestBody, isErrorResponse } from "$shared/errors";
+import { InternalRequest } from "@shared/rest-types";
+import { HuginnError, HuginnErrorData, HuginnErrorGroupWrapper, RequestBody, isErrorResponse } from "@shared/errors";
 
 export class HuginnAPIError extends Error {
    public requestBody: RequestBody;

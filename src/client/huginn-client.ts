@@ -1,7 +1,7 @@
-import { ClientOptions, LoginCredentials, RegisterUser } from "$shared/client-types";
+import { ClientOptions, LoginCredentials, RegisterUser } from "@shared/client-types";
 import { createDefaultClientOptions } from "../utils";
 import { REST } from "../rest/rest";
-import { APIUser } from "$shared/api-types";
+import { APIUser } from "@shared/api-types";
 import { UserAPI } from "../user/users-api";
 import { AuthAPI } from "../user/auth-api";
 import { CommonAPI } from "../user/common-api";

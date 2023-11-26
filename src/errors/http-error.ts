@@ -1,5 +1,5 @@
-import { InternalRequest } from "$shared/rest-types";
-import { RequestBody } from "$shared/errors";
+import { InternalRequest } from "@shared/rest-types";
+import { RequestBody } from "@shared/errors";
 
 export class HTTPError extends Error {
    public requestBody: RequestBody;

@@ -1,5 +1,5 @@
-import { APIPostUniqueUsernameJSONBody, APIPostUniqueUsernameResult } from "$shared/api-types";
-import { Routes } from "$shared/routes";
+import { APIPostUniqueUsernameJSONBody, APIPostUniqueUsernameResult } from "@shared/api-types";
+import { Routes } from "@shared/routes";
 import { REST } from "../rest/rest";
 
 export class CommonAPI {

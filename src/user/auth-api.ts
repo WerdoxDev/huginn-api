@@ -3,8 +3,8 @@ import {
    APIPostLoginResult,
    APIPostRegisterJSONBody,
    APIPostRegisterResult,
-} from "$shared/api-types";
-import { Routes } from "$shared/routes";
+} from "@shared/api-types";
+import { Routes } from "@shared/routes";
 import { REST } from "../rest/rest";
 
 export class AuthAPI {
