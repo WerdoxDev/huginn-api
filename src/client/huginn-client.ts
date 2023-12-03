@@ -5,16 +5,16 @@ import { APIUser } from "@shared/api-types";
 import { UserAPI } from "../user/users-api";
 import { AuthAPI } from "../user/auth-api";
 import { CommonAPI } from "../user/common-api";
+import { TokenHandler } from "../rest/token-handler";
 
 export class HuginnClient {
    public readonly options: ClientOptions;
    private rest: REST;
+   public tokenHandler: TokenHandler;
    public users: UserAPI;
    public auth: AuthAPI;
    public common: CommonAPI;
 
-   private token?: string;
-   private refreshToken?: string;
    public user?: APIUser;
 
    constructor(options?: ClientOptions) {
@@ -25,7 +25,8 @@ export class HuginnClient {
          ...options,
       };
 
-      this.rest = new REST(this.options.rest);
+      this.tokenHandler = new TokenHandler(this);
+      this.rest = new REST(this.tokenHandler, this.options.rest);
 
       this.users = new UserAPI(this.rest);
       this.auth = new AuthAPI(this.rest);
@@ -36,15 +37,15 @@ export class HuginnClient {
       const result = await this.auth.login(credentials);
 
       this.user = { ...result };
-      this.token = result.token;
-      this.refreshToken = result.refreshToken;
+      this.tokenHandler.setToken(result.token);
+      this.tokenHandler.setRefreshToken(result.refreshToken);
    }
 
    async register(user: RegisterUser) {
       const result = await this.auth.register(user);
 
       this.user = { ...result };
-      this.token = result.token;
-      this.refreshToken = result.refreshToken;
+      this.tokenHandler.setToken(result.token);
+      this.tokenHandler.setRefreshToken(result.refreshToken);
    }
 }
