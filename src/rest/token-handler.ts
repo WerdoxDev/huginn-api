@@ -2,9 +2,10 @@ import { HuginnClient } from "..";
 import { decodeToken } from "../utils";
 
 export class TokenHandler {
-   private token?: string;
-   private refreshToken?: string;
+   private _token?: string;
+   private _refreshToken?: string;
    private tokenTimeout?: Timer;
+   private timeoutPromise?: Promise<boolean>;
 
    private readonly client: HuginnClient;
 
@@ -15,15 +16,8 @@ export class TokenHandler {
    /**
     * Returns the authorization token as a readonly string
     */
-   public getToken(): Readonly<string | undefined> {
-      return this.token;
-   }
-
-   /**
-    * Returns the refresh token as a readonly string
-    */
-   public getRefreshToken(): Readonly<string | undefined> {
-      return this.refreshToken;
+   public get token(): Readonly<string | undefined> {
+      return this._token;
    }
 
    /**
@@ -31,8 +25,8 @@ export class TokenHandler {
     *
     * @param token - The authorization token to use
     */
-   public setToken(token: string) {
-      this.token = token;
+   public set token(token: string) {
+      this._token = token;
 
       const [isValid, payload] = decodeToken(token);
 
@@ -48,12 +42,28 @@ export class TokenHandler {
    }
 
    /**
+    * Returns the refresh token as a readonly string
+    */
+   public get refreshToken(): Readonly<string | undefined> {
+      return this._refreshToken;
+   }
+
+   /**
     * Sets the refresh token used to get new tokens when they expire
     *
     * @param refreshToken - The refresh token to later get new authorization token with
     */
-   public setRefreshToken(refreshToken: string) {
-      this.refreshToken = refreshToken;
+   public set refreshToken(refreshToken: string) {
+      this._refreshToken = refreshToken;
+   }
+
+   /**
+    * Returns a promise that waits for the token to refresh.
+    * Result will be whether or not token got successfuly refreshed
+    * Immidiatly returns a false if no timeout is in process
+    */
+   public async waitForTokenRefresh(): Promise<boolean> {
+      return (await this.timeoutPromise) || false;
    }
 
    private startRefreshTimeout(time: number) {
@@ -61,8 +71,16 @@ export class TokenHandler {
          clearTimeout(this.tokenTimeout);
       }
 
-      this.tokenTimeout = setTimeout(() => {
-         // does api call
-      }, time);
+      this.timeoutPromise = new Promise<boolean>((resolve) => {
+         this.tokenTimeout = setTimeout(async () => {
+            const newTokens = await this.client.auth.refreshToken({ refreshToken: this.refreshToken || "" });
+
+            this.token = newTokens.token;
+            this.refreshToken = newTokens.refreshToken;
+
+            console.log("Got new token");
+            resolve(true);
+         }, time);
+      });
    }
 }

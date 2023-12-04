@@ -90,11 +90,11 @@ export class REST {
       const headers: RequestHeaders = {};
 
       if (request.auth) {
-         if (!this.tokenHandler.getToken()) {
+         if (!this.tokenHandler.token) {
             throw new Error("Expected token for a request, but wasn't present");
          }
 
-         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.tokenHandler.getToken()}`;
+         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.tokenHandler.token}`;
       }
 
       if (request.reason?.length) {
@@ -131,7 +131,7 @@ export class REST {
       if (status >= 400 && status < 500) {
          // If we receive this status code, it means the token is not valid.
          if (status === 401 && requestData.auth) {
-            this.tokenHandler.setToken(null!);
+            this.tokenHandler.token = null!;
          }
 
          const data = (await parseResponse(response)) as HuginnErrorData;

@@ -37,15 +37,15 @@ export class HuginnClient {
       const result = await this.auth.login(credentials);
 
       this.user = { ...result };
-      this.tokenHandler.setToken(result.token);
-      this.tokenHandler.setRefreshToken(result.refreshToken);
+      this.tokenHandler.token = result.token;
+      this.tokenHandler.refreshToken = result.refreshToken;
    }
 
    async register(user: RegisterUser) {
       const result = await this.auth.register(user);
 
       this.user = { ...result };
-      this.tokenHandler.setToken(result.token);
-      this.tokenHandler.setRefreshToken(result.refreshToken);
+      this.tokenHandler.token = result.token;
+      this.tokenHandler.refreshToken = result.refreshToken;
    }
 }
