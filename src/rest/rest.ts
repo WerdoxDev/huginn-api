@@ -14,14 +14,17 @@ import { HTTPError } from "../errors/http-error";
 import { HuginnAPIError } from "../errors/huginn-error";
 import { parseResponse } from "../utils";
 import { DefaultRestOptions } from "./constants";
+import { TokenHandler } from "./token-handler";
 
 // TODO: Implement put, patch, delete... requests
 export class REST {
    public readonly options: RESTOptions;
-   private token?: string;
+   private tokenHandler: TokenHandler;
 
-   public constructor(options: Partial<RESTOptions> = {}) {
+   public constructor(tokenHandler: TokenHandler, options: Partial<RESTOptions> = {}) {
       this.options = { ...DefaultRestOptions, ...options };
+
+      this.tokenHandler = tokenHandler;
    }
 
    /**
@@ -87,11 +90,11 @@ export class REST {
       const headers: RequestHeaders = {};
 
       if (request.auth) {
-         if (!this.token) {
+         if (!this.tokenHandler.token) {
             throw new Error("Expected token for a request, but wasn't present");
          }
 
-         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.token}`;
+         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.tokenHandler.token}`;
       }
 
       if (request.reason?.length) {
@@ -118,16 +121,6 @@ export class REST {
       return { url, fetchOptions };
    }
 
-   /**
-    * Sets the authorization token used by auth requests
-    *
-    * @param token - The authorization token to use
-    */
-   public setToken(token: string) {
-      this.token = token;
-      return this;
-   }
-
    public async handleErrors(response: ResponseLike, method: string, url: string, requestData: HandlerRequestData) {
       const status = response.status;
 
@@ -136,9 +129,9 @@ export class REST {
       }
 
       if (status >= 400 && status < 500) {
-         // If we receive this status code, it means the token we had is no longer valid.
+         // If we receive this status code, it means the token is not valid.
          if (status === 401 && requestData.auth) {
-            this.setToken(null!);
+            this.tokenHandler.token = null!;
          }
 
          const data = (await parseResponse(response)) as HuginnErrorData;

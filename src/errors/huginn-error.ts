@@ -21,13 +21,13 @@ export class HuginnAPIError extends Error {
       // TODO: add 'files' here
       bodyData: Pick<InternalRequest, "body">
    ) {
-      super(HuginnAPIError.getMessage(rawError));
+      super(HuginnAPIError.getMessage(rawError, status));
 
       // TODO: add 'files: bodyData.files'
       this.requestBody = { json: bodyData.body };
    }
 
-   private static getMessage(error: HuginnErrorData) {
+   private static getMessage(error: HuginnErrorData, status: number) {
       let flattened = "";
 
       if (error.errors) {
@@ -36,7 +36,7 @@ export class HuginnAPIError extends Error {
 
       return error.message && flattened
          ? `${error.message}\n${flattened}`
-         : error.message || flattened || "Unknown Error";
+         : error.message || flattened || `Unknown Error with status: ${status}`;
    }
 
    public override get name(): string {

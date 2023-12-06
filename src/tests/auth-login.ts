@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { HuginnClient } from "../client/huginn-client";
 import { LoginCredentials } from "@shared/client-types";
+import { testCredentials } from "./test-utils";
 
 describe("auth-login", () => {
    test("auth-login-invalid-body", async () => {
@@ -37,13 +38,7 @@ describe("auth-login", () => {
    test("auth-login-successful", async () => {
       const client = new HuginnClient();
 
-      const user: LoginCredentials = {
-         username: "test",
-         email: "test@gmail.com",
-         password: "test",
-      };
-
-      await client.login(user);
+      await client.login(testCredentials);
 
       expect(client.user).toBeDefined();
    });

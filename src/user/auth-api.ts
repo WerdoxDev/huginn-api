@@ -1,6 +1,8 @@
 import {
    APIPostLoginJSONBody,
    APIPostLoginResult,
+   APIPostRefreshTokenJSONBody,
+   APIPostRefreshTokenResult,
    APIPostRegisterJSONBody,
    APIPostRegisterResult,
 } from "@shared/api-types";
@@ -20,5 +22,9 @@ export class AuthAPI {
 
    public async register(body: APIPostRegisterJSONBody) {
       return this.rest.post(Routes.register(), { body }) as Promise<APIPostRegisterResult>;
+   }
+
+   public async refreshToken(body: APIPostRefreshTokenJSONBody) {
+      return this.rest.post(Routes.refreshToken(), { body }) as Promise<APIPostRefreshTokenResult>;
    }
 }
