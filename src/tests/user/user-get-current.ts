@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { getLoggedClient } from "./test-utils";
+import { getLoggedClient } from "../test-utils";
 
 describe("user-get-current", () => {
    test("user-get-current-successful", async () => {

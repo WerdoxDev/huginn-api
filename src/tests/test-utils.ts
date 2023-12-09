@@ -7,10 +7,22 @@ export const testCredentials: LoginCredentials = {
    password: "test",
 };
 
-export const editCredentials: LoginCredentials = {
+export const test2Credentials: LoginCredentials = {
    username: "test2",
    email: "test2@gmail.com",
    password: "test2",
+};
+
+export const test3Credentials: LoginCredentials = {
+   username: "test3",
+   email: "test3@gmail.com",
+   password: "test3",
+};
+
+export const editCredentials: LoginCredentials = {
+   username: "test-edited",
+   email: "test.edited@gmail.com",
+   password: "test-edited",
 };
 
 export async function getLoggedClient(credentials: LoginCredentials = testCredentials) {

@@ -1,2 +1,2 @@
-import "./auth-register";
-import "./auth-login";
+import "./auth/auth-register";
+import "./auth/auth-login";

@@ -1,12 +1,12 @@
 import { describe, expect, test } from "bun:test";
-import { HuginnClient } from "../client/huginn-client";
+import { HuginnClient } from "../../client/huginn-client";
 import { LoginCredentials } from "@shared/client-types";
-import { testCredentials } from "./test-utils";
+import { testCredentials } from "../test-utils";
 
 describe("auth-login", () => {
    test("auth-login-invalid-body", async () => {
       const client = new HuginnClient();
-      expect(() => client.login({} as LoginCredentials)).toThrow();
+      expect(() => client.login({} as LoginCredentials)).toThrow("Invalid Form Body");
    });
 
    test("auth-login-with-username", async () => {
