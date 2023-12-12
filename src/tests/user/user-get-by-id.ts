@@ -5,7 +5,7 @@ describe("user-get-by-id", () => {
    test("user-get-by-id-invalid-id", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.get("")).toThrow("404");
+      expect(() => client.users.get("invalid")).toThrow("Unknown User");
    });
    test("user-get-by-id-successful", async () => {
       const client = await getLoggedClient();

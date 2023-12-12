@@ -1,6 +1,10 @@
-import { describe, expect, test } from "bun:test";
+import { describe, expect, test, beforeAll } from "bun:test";
 import { HuginnClient } from "../../client/huginn-client";
 import { RegisterUser } from "@shared/client-types";
+
+beforeAll(async () => {
+   await fetch("http://localhost:3000/test/test-users", { method: "POST" });
+});
 
 describe("auth-register", () => {
    test("auth-register-invalid-body", async () => {

@@ -9,7 +9,7 @@ export const DefaultRestOptions = {
    },
 } as const satisfies Required<RESTOptions>;
 
-async function defaultMakeRequest(url: string, init: RequestInit): Promise<ResponseLike> {
+export async function defaultMakeRequest(url: string, init: RequestInit): Promise<ResponseLike> {
    const response = await fetch(url, init);
 
    return {
