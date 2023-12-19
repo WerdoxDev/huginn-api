@@ -135,8 +135,8 @@ export class REST {
          }
 
          const data = (await parseResponse(response)) as HuginnErrorData;
-         // throw the API error
 
+         // throw the API error
          throw new HuginnAPIError(data, data.code, status, method, url, requestData);
       }
 

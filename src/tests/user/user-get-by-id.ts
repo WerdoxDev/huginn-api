@@ -10,7 +10,7 @@ describe("user-get-by-id", () => {
    test("user-get-by-id-successful", async () => {
       const client = await getLoggedClient();
 
-      const result = await client.users.get(client.user?._id || "");
+      const result = await client.users.get(client.user?.id || "");
 
       expect(result).toBeDefined();
       expect(result).not.toHaveProperty("email");

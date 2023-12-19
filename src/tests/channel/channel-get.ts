@@ -20,7 +20,7 @@ describe("channel-get", () => {
 
       const channels = await client.channels.getAll();
 
-      const channel = await client.channels.get(channels[0]._id);
+      const channel = await client.channels.get(channels[0].id);
       expect(channel).toBeDefined();
    });
 });

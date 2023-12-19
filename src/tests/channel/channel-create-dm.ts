@@ -32,11 +32,11 @@ describe("channel-create-dm", () => {
       const client = await getLoggedClient();
       const secondClient = await getLoggedClient(test2Credentials);
 
-      const result = await client.channels.createDm({ recipientId: secondClient.user?._id });
+      const result = await client.channels.createDm({ recipientId: secondClient.user?.id });
 
       expect(result).toBeDefined();
-      expect(result.recipients[0]._id).toBe(client.user!._id);
-      expect(result.recipients[1]._id).toBe(secondClient.user!._id);
+      expect(result.recipients[0].id).toBe(client.user!.id);
+      expect(result.recipients[1].id).toBe(secondClient.user!.id);
    });
    test("channel-create-group-dm-successful", async () => {
       const client = await getLoggedClient();
@@ -45,14 +45,14 @@ describe("channel-create-dm", () => {
 
       const users: Record<Snowflake, string> = {};
 
-      users[secondClient.user!._id] = secondClient.user!.displayName;
-      users[thirdClient.user!._id] = thirdClient.user!.displayName;
+      users[secondClient.user!.id] = secondClient.user!.displayName;
+      users[thirdClient.user!.id] = thirdClient.user!.displayName;
 
       const result = await client.channels.createDm({ users });
 
       expect(result).toBeDefined();
-      expect(result.recipients[0]._id).toBe(client.user!._id);
-      expect(result.recipients[1]._id).toBe(secondClient.user!._id);
-      expect(result.recipients[2]._id).toBe(thirdClient.user!._id);
+      expect(result.recipients[0].id).toBe(client.user!.id);
+      expect(result.recipients[1].id).toBe(secondClient.user!.id);
+      expect(result.recipients[2].id).toBe(thirdClient.user!.id);
    });
 });
