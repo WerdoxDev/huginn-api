@@ -26,7 +26,7 @@ describe("message-get", () => {
          expect(messages).toBeArray();
          expect(messages).toHaveLength(50);
       },
-      { timeout: 0 }
+      { timeout: 10000 }
    );
    test(
       "message-get-channel-messages-with-limit",
@@ -42,6 +42,6 @@ describe("message-get", () => {
          expect(messages).toBeArray();
          expect(messages).toHaveLength(20);
       },
-      { timeout: 0 }
+      { timeout: 10000 }
    );
 });

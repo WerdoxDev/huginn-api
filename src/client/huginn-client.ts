@@ -1,7 +1,7 @@
 import { ClientOptions, LoginCredentials, RegisterUser } from "@shared/client-types";
 import { createDefaultClientOptions } from "../utils";
 import { REST } from "../rest/rest";
-import { APIUser } from "@shared/api-types";
+import { APIUser, Tokens } from "@shared/api-types";
 import { UserAPI } from "../apis/user-api";
 import { AuthAPI } from "../apis/auth-api";
 import { CommonAPI } from "../apis/common-api";
@@ -34,6 +34,20 @@ export class HuginnClient {
       this.auth = new AuthAPI(this.rest);
       this.channels = new ChannelAPI(this.rest);
       this.common = new CommonAPI(this.rest);
+   }
+
+   async initializeWithToken(tokens: Partial<Tokens>) {
+      if (tokens.token) {
+         this.tokenHandler.token = tokens.token;
+
+         this.user = await this.users.getCurrent();
+      } else if (tokens.refreshToken) {
+         const newTokens = await this.auth.refreshToken({ refreshToken: tokens.refreshToken });
+         this.tokenHandler.refreshToken = newTokens.refreshToken;
+         this.tokenHandler.token = newTokens.token;
+
+         this.user = await this.users.getCurrent();
+      }
    }
 
    async login(credentials: LoginCredentials) {
