@@ -16,10 +16,6 @@ describe("message-get", () => {
 
          const channel = (await client.channels.getAll())[0];
 
-         for (let i = 0; i < 55; i++) {
-            await client.channels.createMessage(channel.id, { content: "test" + i });
-         }
-
          const messages = await client.channels.getMessages(channel.id);
 
          expect(messages).toBeDefined();

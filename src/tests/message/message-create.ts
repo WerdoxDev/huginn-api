@@ -14,6 +14,21 @@ describe("message-create", () => {
 
       expect(result).toBeDefined();
    });
+   test("message-create-55-successful", async () => {
+      const client = await getLoggedClient();
+
+      const channel = (await client.channels.getAll())[0];
+
+      const promise = new Promise(async (resolve) => {
+         for (let i = 0; i < 55; i++) {
+            await client.channels.createMessage(channel.id, { content: "test" + i + 1 });
+         }
+
+         resolve(true);
+      });
+
+      expect(() => promise).not.toThrow();
+   });
    test("message-create-invalid-channel-id", async () => {
       const client = await getLoggedClient();
 

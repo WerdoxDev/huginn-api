@@ -9,6 +9,7 @@ import {
    APIGetMessageByIdResult,
    APIPostCreateDefaultMessageJSONBody,
    APIPostCreateDefaultMessageResult,
+   APIGetChannelMessagesResult,
 } from "@shared/api-types";
 
 export class ChannelAPI {
@@ -34,7 +35,7 @@ export class ChannelAPI {
       return this.rest.get(Routes.channelMessages(channelId), {
          auth: true,
          query: new URLSearchParams({ limit: limit?.toString() || "" }),
-      });
+      }) as Promise<APIGetChannelMessagesResult>;
    }
 
    public async createDm(body: APIPostCreateDMJsonBody) {
