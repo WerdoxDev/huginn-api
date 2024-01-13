@@ -14,17 +14,17 @@ import { HTTPError } from "../errors/http-error";
 import { HuginnAPIError } from "../errors/huginn-error";
 import { parseResponse } from "../utils";
 import { DefaultRestOptions } from "./constants";
-import { TokenHandler } from "./token-handler";
+import { HuginnClient } from "..";
 
 // TODO: Implement put, patch, delete... requests
 export class REST {
    public readonly options: RESTOptions;
-   private tokenHandler: TokenHandler;
+   private client: HuginnClient;
 
-   public constructor(tokenHandler: TokenHandler, options: Partial<RESTOptions> = {}) {
+   public constructor(client: HuginnClient, options: Partial<RESTOptions> = {}) {
       this.options = { ...DefaultRestOptions, ...options };
 
-      this.tokenHandler = tokenHandler;
+      this.client = client;
    }
 
    /**
@@ -90,11 +90,11 @@ export class REST {
       const headers: RequestHeaders = {};
 
       if (request.auth) {
-         if (!this.tokenHandler.token) {
+         if (!this.client.tokenHandler.token) {
             throw new Error("Expected token for a request, but wasn't present");
          }
 
-         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.tokenHandler.token}`;
+         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.client.tokenHandler.token}`;
       }
 
       if (request.reason?.length) {
@@ -131,7 +131,9 @@ export class REST {
       if (status >= 400 && status < 500) {
          // If we receive this status code, it means the token is not valid.
          if (status === 401 && requestData.auth) {
-            this.tokenHandler.token = null!;
+            console.log("fuck");
+            this.client.tokenHandler.token = null!;
+            this.client.user = undefined;
          }
 
          const data = (await parseResponse(response)) as HuginnErrorData;

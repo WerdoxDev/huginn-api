@@ -28,7 +28,7 @@ export class HuginnClient {
       };
 
       this.tokenHandler = new TokenHandler(this);
-      this.rest = new REST(this.tokenHandler, this.options.rest);
+      this.rest = new REST(this, this.options.rest);
 
       this.users = new UserAPI(this.rest);
       this.auth = new AuthAPI(this.rest);
@@ -37,16 +37,24 @@ export class HuginnClient {
    }
 
    async initializeWithToken(tokens: Partial<Tokens>) {
-      if (tokens.token) {
-         this.tokenHandler.token = tokens.token;
+      try {
+         if (tokens.token) {
+            this.tokenHandler.token = tokens.token;
 
-         this.user = await this.users.getCurrent();
-      } else if (tokens.refreshToken) {
-         const newTokens = await this.auth.refreshToken({ refreshToken: tokens.refreshToken });
-         this.tokenHandler.refreshToken = newTokens.refreshToken;
-         this.tokenHandler.token = newTokens.token;
+            this.user = await this.users.getCurrent();
+         } else if (tokens.refreshToken) {
+            const newTokens = await this.auth.refreshToken({ refreshToken: tokens.refreshToken });
+            this.tokenHandler.refreshToken = newTokens.refreshToken;
+            this.tokenHandler.token = newTokens.token;
 
-         this.user = await this.users.getCurrent();
+            this.user = await this.users.getCurrent();
+         }
+      } catch (e) {
+         this.user = undefined;
+         this.tokenHandler.token = null!;
+         this.tokenHandler.refreshToken = null!;
+
+         throw e;
       }
    }
 
@@ -64,5 +72,9 @@ export class HuginnClient {
       this.user = { ...result };
       this.tokenHandler.token = result.token;
       this.tokenHandler.refreshToken = result.refreshToken;
+   }
+
+   public get isLoggedIn() {
+      return this.user !== undefined;
    }
 }
