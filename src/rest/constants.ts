@@ -1,13 +1,13 @@
 import { RESTOptions, ResponseLike } from "@shared/rest-types";
 // import { STATUS_CODES } from "https";
 
-export const DefaultRestOptions = {
+export const DefaultRestOptions: Required<RESTOptions> = {
    api: "http://localhost:3000",
    authPrefix: "Bearer",
    async makeRequest(...args): Promise<ResponseLike> {
       return defaultMakeRequest(...args);
    },
-} as const satisfies Required<RESTOptions>;
+} as const;
 
 export async function defaultMakeRequest(url: string, init: RequestInit): Promise<ResponseLike> {
    const response = await fetch(url, init);

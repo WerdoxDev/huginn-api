@@ -38,8 +38,6 @@ export class TokenHandler {
       const date2 = new Date((payload.exp || 0) * 1000);
       const diffTime = date2.getTime() - date1.getTime();
 
-      console.log(`${date1.getTime()}, ${date2.getTime()}`);
-
       this.startRefreshTimeout(diffTime - 5000);
    }
 

@@ -7,6 +7,7 @@ import { AuthAPI } from "../apis/auth-api";
 import { CommonAPI } from "../apis/common-api";
 import { TokenHandler } from "../rest/token-handler";
 import { ChannelAPI } from "../apis/channel-api";
+import { Gateway } from "../gateway/gateway";
 
 export class HuginnClient {
    public readonly options: ClientOptions;
@@ -16,10 +17,11 @@ export class HuginnClient {
    public auth: AuthAPI;
    public channels: ChannelAPI;
    public common: CommonAPI;
+   public gateway: Gateway;
 
    public user?: APIUser;
 
-   constructor(options?: ClientOptions) {
+   constructor(options?: Partial<ClientOptions>) {
       const defaultOptions = createDefaultClientOptions();
 
       this.options = {
@@ -34,6 +36,7 @@ export class HuginnClient {
       this.auth = new AuthAPI(this.rest);
       this.channels = new ChannelAPI(this.rest);
       this.common = new CommonAPI(this.rest);
+      this.gateway = new Gateway(this, this.options.gateway);
    }
 
    async initializeWithToken(tokens: Partial<Tokens>) {
