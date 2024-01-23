@@ -1,13 +1,13 @@
-import { ClientOptions, LoginCredentials, RegisterUser } from "@shared/client-types";
-import { createDefaultClientOptions } from "../utils";
-import { REST } from "../rest/rest";
 import { APIUser, Tokens } from "@shared/api-types";
-import { UserAPI } from "../apis/user-api";
+import { ClientOptions, LoginCredentials, RegisterUser } from "../..";
 import { AuthAPI } from "../apis/auth-api";
-import { CommonAPI } from "../apis/common-api";
-import { TokenHandler } from "../rest/token-handler";
 import { ChannelAPI } from "../apis/channel-api";
-import { Gateway } from "../gateway/gateway";
+import { CommonAPI } from "../apis/common-api";
+import { UserAPI } from "../apis/user-api";
+import { Gateway } from "../gateway/client-gateway";
+import { REST } from "../rest/rest";
+import { TokenHandler } from "../rest/token-handler";
+import { createDefaultClientOptions } from "../utils";
 
 export class HuginnClient {
    public readonly options: ClientOptions;

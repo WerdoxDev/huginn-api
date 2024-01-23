@@ -1,20 +1,20 @@
+import { HuginnErrorData } from "@shared/errors";
 import {
    HandlerRequestData,
    InternalRequest,
-   RESTOptions,
    RequestData,
    RequestHeaders,
    RequestMethod,
    ResolvedRequest,
    ResponseLike,
 } from "@shared/rest-types";
-import { RouteLike } from "@shared/types";
-import { HuginnErrorData } from "@shared/errors";
+import { RouteLike } from "@shared/routes";
+import { HuginnClient } from "..";
+import { RESTOptions } from "../..";
 import { HTTPError } from "../errors/http-error";
 import { HuginnAPIError } from "../errors/huginn-error";
 import { parseResponse } from "../utils";
-import { DefaultRestOptions } from "./constants";
-import { HuginnClient } from "..";
+import { DefaultRestOptions } from "./rest-utils";
 
 // TODO: Implement put, patch, delete... requests
 export class REST {

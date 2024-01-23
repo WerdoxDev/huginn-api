@@ -10,7 +10,7 @@
       "composite": true,
       "strict": true,
       "downlevelIteration": true,
-      "skipLibCheck": true,
+      "skipLibCheck": false,
       "jsx": "react-jsx",
       "allowSyntheticDefaultImports": true,
       "forceConsistentCasingInFileNames": true,
@@ -19,6 +19,6 @@
          "@shared/*": ["../huginn-shared/lib/*"]
       }
    },
-   "include": ["**/*"],
+   "include": ["**/*", "index.d.ts"],
    "references": [{ "path": "../huginn-shared" }]
 }

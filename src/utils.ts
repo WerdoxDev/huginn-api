@@ -1,9 +1,9 @@
-import { ClientOptions } from "@shared/client-types";
 import { ResponseLike } from "@shared/rest-types";
-import { TokenPayload } from "@shared/types";
+import { TokenPayload } from "@shared/api-types";
 import * as jose from "jose";
 import { DefaultGatewayOptions } from "./gateway/constants";
-import { DefaultRestOptions } from "./rest/constants";
+import { DefaultRestOptions } from "./rest/rest-utils";
+import { ClientOptions } from "..";
 
 export async function parseResponse(response: ResponseLike): Promise<unknown> {
    if (response.headers.get("Content-Type")?.startsWith("application/json")) {

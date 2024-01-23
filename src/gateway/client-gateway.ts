@@ -1,7 +1,8 @@
-import { GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations, GatewayOptions } from "@shared/gateway-types";
+import { GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations } from "@shared/gateway-types";
 import { HuginnClient } from "..";
-import { DefaultGatewayOptions } from "../gateway/constants";
-import { isHelloOpcode } from "./utils";
+import { DefaultGatewayOptions } from "./constants";
+import { isHelloOpcode } from "./gateway-utils";
+import { GatewayOptions } from "../..";
 
 export class Gateway {
    public readonly options: GatewayOptions;
@@ -35,8 +36,8 @@ export class Gateway {
          console.log("Gateway Connected!");
       });
 
-      this.socket?.addEventListener("close", (_e) => {
-         console.log("Gateway Closed!");
+      this.socket?.addEventListener("close", (e) => {
+         console.log(`Gateway Closed with code: ${e.code}`);
          this.stopHeartbeat();
       });
 

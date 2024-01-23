@@ -1,4 +1,4 @@
-import { GatewayOptions } from "@shared/gateway-types";
+import { GatewayOptions } from "../..";
 
 export const DefaultGatewayOptions: Required<GatewayOptions> = {
    url: "ws://localhost:3000/gateway",

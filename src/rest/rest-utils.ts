@@ -1,5 +1,5 @@
-import { RESTOptions, ResponseLike } from "@shared/rest-types";
-// import { STATUS_CODES } from "https";
+import { ResponseLike } from "@shared/rest-types";
+import { RESTOptions } from "../..";
 
 export const DefaultRestOptions: Required<RESTOptions> = {
    api: "http://localhost:3000",

@@ -1,16 +1,16 @@
-import { Snowflake } from "@shared/types";
-import { REST } from "../rest/rest";
-import { Routes } from "@shared/routes";
 import {
    APIGetChannelByIdResult,
+   APIGetChannelMessagesResult,
+   APIGetMessageByIdResult,
    APIGetUserChannelsResult,
    APIPostCreateDMJsonBody,
    APIPostCreateDMResult,
-   APIGetMessageByIdResult,
    APIPostCreateDefaultMessageJSONBody,
    APIPostCreateDefaultMessageResult,
-   APIGetChannelMessagesResult,
 } from "@shared/api-types";
+import { Routes } from "@shared/routes";
+import { Snowflake } from "@shared/snowflake";
+import { REST } from "../rest/rest";
 
 export class ChannelAPI {
    private readonly rest: REST;
