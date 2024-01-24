@@ -1,10 +1,11 @@
 import { GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations } from "@shared/gateway-types";
 import { HuginnClient } from "..";
 import { DefaultGatewayOptions } from "./constants";
-import { isHelloOpcode } from "./gateway-utils";
+import { isDispatchOpcode, isHelloOpcode } from "./gateway-utils";
 import { GatewayOptions } from "../..";
+import EventEmitter from "eventemitter3";
 
-export class Gateway {
+export class Gateway extends EventEmitter {
    public readonly options: GatewayOptions;
    private readonly client: HuginnClient;
 
@@ -13,6 +14,8 @@ export class Gateway {
    private sequence: number | null;
 
    public constructor(client: HuginnClient, options: Partial<GatewayOptions> = {}) {
+      super();
+
       this.options = { ...DefaultGatewayOptions, ...options };
       this.client = client;
 
@@ -51,6 +54,8 @@ export class Gateway {
 
          if (isHelloOpcode(data)) {
             this.handleHello(data);
+         } else if (isDispatchOpcode(data)) {
+            this.emit(data.t, data.d);
          }
       });
    }
