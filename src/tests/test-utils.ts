@@ -1,4 +1,4 @@
-import { LoginCredentials } from "@shared/client-types";
+import { LoginCredentials } from "@shared/api-types";
 import { HuginnClient } from "..";
 
 export const testCredentials: LoginCredentials = {

@@ -1,4 +1,3 @@
-import { APIPostLoginJSONBody, APIPostRegisterJSONBody, APIDMChannel, APIGroupDMChannel } from "@shared/api-types";
 import { ResponseLike } from "@shared/rest-types";
 
 type ClientOptions = {
@@ -18,7 +17,3 @@ type GatewayOptions = {
    url: string;
    createSocket(url: string): WebSocket;
 };
-
-type LoginCredentials = APIPostLoginJSONBody;
-type RegisterUser = APIPostRegisterJSONBody;
-type DirectChannel = APIDMChannel | APIGroupDMChannel;

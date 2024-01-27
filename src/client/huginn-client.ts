@@ -1,5 +1,5 @@
-import { APIUser, Tokens } from "@shared/api-types";
-import { ClientOptions, LoginCredentials, RegisterUser } from "../..";
+import { APIUser, LoginCredentials, RegisterUser, Tokens } from "@shared/api-types";
+import { ClientOptions } from "../..";
 import { AuthAPI } from "../apis/auth-api";
 import { ChannelAPI } from "../apis/channel-api";
 import { CommonAPI } from "../apis/common-api";
@@ -61,7 +61,7 @@ export class HuginnClient {
       }
    }
 
-   async login(credentials: LoginCredentials) {
+   public async login(credentials: LoginCredentials) {
       const result = await this.auth.login(credentials);
 
       this.user = { ...result };
@@ -69,12 +69,19 @@ export class HuginnClient {
       this.tokenHandler.refreshToken = result.refreshToken;
    }
 
-   async register(user: RegisterUser) {
+   public async register(user: RegisterUser) {
       const result = await this.auth.register(user);
 
       this.user = { ...result };
       this.tokenHandler.token = result.token;
       this.tokenHandler.refreshToken = result.refreshToken;
+   }
+
+   public async logout() {
+      await this.auth.logout();
+
+      this.tokenHandler.token = null!;
+      this.user = undefined;
    }
 
    public get isLoggedIn() {

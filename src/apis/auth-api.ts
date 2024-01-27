@@ -24,6 +24,10 @@ export class AuthAPI {
       return this.rest.post(Routes.register(), { body }) as Promise<APIPostRegisterResult>;
    }
 
+   public async logout() {
+      return this.rest.post(Routes.logout(), { auth: true });
+   }
+
    public async refreshToken(body: APIPostRefreshTokenJSONBody) {
       return this.rest.post(Routes.refreshToken(), { body }) as Promise<APIPostRefreshTokenResult>;
    }

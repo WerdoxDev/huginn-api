@@ -1,6 +1,6 @@
 import { describe, expect, test, beforeAll } from "bun:test";
 import { HuginnClient } from "../../client/huginn-client";
-import { RegisterUser } from "@shared/client-types";
+import { RegisterUser } from "@shared/api-types";
 
 beforeAll(async () => {
    await fetch("http://localhost:3000/test/test-users", { method: "POST" });
