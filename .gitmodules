@@ -1,3 +1,0 @@
-[submodule "src/lib/huginn-shared"]
-	path = src/lib/huginn-shared
-	url = git@github.com:WerdoxDev/huginn-shared

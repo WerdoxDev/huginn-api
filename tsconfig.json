@@ -16,9 +16,9 @@
       "forceConsistentCasingInFileNames": true,
       "allowJs": true,
       "paths": {
-         "@shared/*": ["./src/lib/huginn-shared/lib/*"]
+         "@shared/*": ["../huginn-shared/lib/*"]
       }
    },
-   "include": ["**/*", "index.d.ts"]
-   // "references": [{ "path": "../huginn-shared" }]
+   "include": ["**/*", "index.d.ts"],
+   "references": [{ "path": "../huginn-shared" }]
 }
