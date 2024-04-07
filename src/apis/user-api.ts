@@ -1,4 +1,10 @@
-import { APIGetCurrentUserResult, APIGetUserResult, APIPatchCurrentUserJSONBody, APIPatchCurrentUserResult } from "@shared/api-types";
+import {
+   APIGetCurrentUserResult,
+   APIGetUserRelationships,
+   APIGetUserResult,
+   APIPatchCurrentUserJSONBody,
+   APIPatchCurrentUserResult,
+} from "@shared/api-types";
 import { Routes } from "@shared/routes";
 import { Snowflake } from "@shared/snowflake";
 import { REST } from "../rest/rest";
@@ -20,5 +26,9 @@ export class UserAPI {
 
    public async edit(body: APIPatchCurrentUserJSONBody) {
       return this.rest.patch(Routes.user("@me"), { body, auth: true }) as Promise<APIPatchCurrentUserResult>;
+   }
+
+   public async getRelationships() {
+      return this.rest.get(Routes.userRelationships(), { auth: true }) as Promise<APIGetUserRelationships>;
    }
 }
