@@ -1,6 +1,8 @@
 import { LoginCredentials } from "@shared/api-types";
 import { HuginnClient } from "..";
 
+export const url = "192.168.178.51:3000";
+
 export const testCredentials: LoginCredentials = {
    username: "test",
    email: "test@gmail.com",
@@ -26,9 +28,14 @@ export const editCredentials: LoginCredentials = {
 };
 
 export async function getLoggedClient(credentials: LoginCredentials = testCredentials) {
-   const client = new HuginnClient();
+   const client = new HuginnClient({ rest: { api: `http://${url}` }, gateway: { url: `ws://${url}` } });
 
    await client.login(credentials);
 
+   return client;
+}
+
+export function getNewClient() {
+   const client = new HuginnClient({ rest: { api: `http://${url}` }, gateway: { url: `ws://${url}` } });
    return client;
 }

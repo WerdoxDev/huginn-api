@@ -1,8 +1,8 @@
 import { beforeAll, describe, test } from "bun:test";
-import { getLoggedClient, test2Credentials } from "./test-utils";
+import { getLoggedClient, test2Credentials, url } from "./test-utils";
 
 beforeAll(async () => {
-   await fetch("http://localhost:3000/test/conversation-messages", { method: "POST" });
+   await fetch(`http://${url}/test/conversation-messages`, { method: "POST" });
 });
 
 describe("conversation", () => {

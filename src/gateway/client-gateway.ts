@@ -78,6 +78,7 @@ export class Gateway extends EventEmitter {
    private startHeartbeat(interval: number) {
       this.heartbeatInterval = setInterval(() => {
          const data: GatewayHeartbeat = { op: GatewayOperations.HEARTBEAT, d: this.sequence };
+         console.log("Sending Heartbeat");
          this.send(data);
       }, interval);
    }

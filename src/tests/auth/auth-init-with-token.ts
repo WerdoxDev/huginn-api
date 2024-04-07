@@ -1,6 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { getLoggedClient } from "../test-utils";
-import { HuginnClient } from "../..";
+import { getLoggedClient, getNewClient } from "../test-utils";
 
 describe("auth-init-with-token", () => {
    test("auth-init-with-token-successful", async () => {
@@ -8,7 +7,7 @@ describe("auth-init-with-token", () => {
 
       const accessToken = client.tokenHandler.token;
 
-      const newClient = new HuginnClient();
+      const newClient = getNewClient();
       await newClient.initializeWithToken({ token: accessToken });
 
       expect(newClient.user).toBeDefined();
@@ -19,7 +18,7 @@ describe("auth-init-with-token", () => {
 
       const refreshToken = client.tokenHandler.refreshToken;
 
-      const newClient = new HuginnClient();
+      const newClient = getNewClient();
       await newClient.initializeWithToken({ refreshToken: refreshToken });
 
       expect(newClient.user).toBeDefined();

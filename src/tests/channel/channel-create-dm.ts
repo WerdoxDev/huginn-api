@@ -1,9 +1,9 @@
 import { beforeAll, describe, expect, test } from "bun:test";
-import { getLoggedClient, test2Credentials, test3Credentials } from "../test-utils";
-import { Snowflake } from "@shared/types";
+import { getLoggedClient, test2Credentials, test3Credentials, url } from "../test-utils";
+import { Snowflake } from "@shared/snowflake";
 
 beforeAll(async () => {
-   fetch("http://localhost:3000/test/test-channels", { method: "POST" });
+   fetch(`http://${url}/test/test-channels`, { method: "POST" });
 });
 
 describe("channel-create-dm", () => {

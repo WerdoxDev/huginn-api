@@ -1,19 +1,19 @@
-import { describe, expect, test, beforeAll } from "bun:test";
-import { HuginnClient } from "../../client/huginn-client";
 import { RegisterUser } from "@shared/api-types";
+import { beforeAll, describe, expect, test } from "bun:test";
+import { getNewClient, url } from "../test-utils";
 
 beforeAll(async () => {
-   await fetch("http://localhost:3000/test/test-users", { method: "POST" });
+   await fetch(`http://${url}/test/test-users`, { method: "POST" });
 });
 
 describe("auth-register", () => {
    test("auth-register-invalid-body", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
       expect(() => client.register({} as RegisterUser)).toThrow("Invalid Form Body");
    });
 
    test("auth-register-short-username-password", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       const user: RegisterUser = {
          username: "t",
@@ -26,7 +26,7 @@ describe("auth-register", () => {
    });
 
    test("auth-register-successful", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       const user: RegisterUser = {
          username: "test",
@@ -41,7 +41,7 @@ describe("auth-register", () => {
    });
 
    test("auth-register-repeated-invalid", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       const user: RegisterUser = {
          username: "test",
@@ -54,7 +54,7 @@ describe("auth-register", () => {
    });
 
    test("auth-register-second-successful", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       const user: RegisterUser = {
          username: "test2",
@@ -69,7 +69,7 @@ describe("auth-register", () => {
    });
 
    test("auth-register-third-successful", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       const user: RegisterUser = {
          username: "test3",
