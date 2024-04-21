@@ -3,7 +3,7 @@ import {
    APIGetChannelMessagesResult,
    APIGetMessageByIdResult,
    APIGetUserChannelsResult,
-   APIPostCreateDMJsonBody,
+   APIPostCreateDMJSONBody,
    APIPostCreateDMResult,
    APIPostCreateDefaultMessageJSONBody,
    APIPostCreateDefaultMessageResult,
@@ -38,7 +38,7 @@ export class ChannelAPI {
       }) as Promise<APIGetChannelMessagesResult>;
    }
 
-   public async createDm(body: APIPostCreateDMJsonBody) {
+   public async createDm(body: APIPostCreateDMJSONBody) {
       return this.rest.post(Routes.userChannels(), { body, auth: true }) as Promise<APIPostCreateDMResult>;
    }
 
