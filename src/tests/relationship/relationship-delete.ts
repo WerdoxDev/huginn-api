@@ -7,7 +7,7 @@ describe("relationship-delete", () => {
 
       const relationships = await client.users.getRelationships();
 
-      expect(() => client.users.deleteRelationship(relationships[0].id)).not.toThrow();
+      expect(() => client.users.deleteRelationship(relationships[0].user.id)).not.toThrow();
    });
    test("relationship-delete-invalid-id", async () => {
       const client = await getLoggedClient();
