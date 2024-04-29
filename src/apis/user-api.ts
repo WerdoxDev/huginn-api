@@ -41,4 +41,8 @@ export class UserAPI {
    public async getRelationship(relationshipId: string) {
       return this.rest.get(Routes.userRelationship(relationshipId), { auth: true }) as Promise<APIGetUserRelationshipByIdResult>;
    }
+
+   public async deleteRelationship(relationshipId: string) {
+      return this.rest.delete(Routes.userRelationship(relationshipId), { auth: true });
+   }
 }

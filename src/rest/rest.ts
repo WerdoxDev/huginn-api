@@ -58,6 +58,16 @@ export class REST {
    }
 
    /**
+    * Runs a DELETE request from the api
+    *
+    * @param fullRoute - The full route to query
+    * @param options - Optional request options
+    */
+   public async delete(fullRoute: RouteLike, options: RequestData = {}) {
+      return this.request({ ...options, fullRoute, method: RequestMethod.DELETE });
+   }
+
+   /**
     * Runs a request from the api
     *
     * @param options - Request options
