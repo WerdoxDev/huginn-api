@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { getLoggedClient } from "../test-utils";
+import { getLoggedClient, test2Credentials } from "../test-utils";
 
 describe("relationship-get", () => {
    test("relationships-get-all-user", async () => {
@@ -17,9 +17,9 @@ describe("relationship-get", () => {
    });
    test("relationship-get-by-id-successful", async () => {
       const client = await getLoggedClient();
-      const relationships = await client.users.getRelationships();
+      const client2 = await getLoggedClient(test2Credentials);
 
-      const relationship = await client.users.getRelationship(relationships[0].id);
+      const relationship = await client.users.getRelationship(client2.user!.id);
       expect(relationship).toBeDefined();
    });
 });

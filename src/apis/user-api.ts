@@ -34,15 +34,19 @@ export class UserAPI {
       return this.rest.post(Routes.userRelationships(), { body, auth: true });
    }
 
+   public async createRelationshipByUserId(userId: Snowflake) {
+      return this.rest.put(Routes.userRelationship(userId), { auth: true });
+   }
+
    public async getRelationships() {
       return this.rest.get(Routes.userRelationships(), { auth: true }) as Promise<APIGetUserRelationshipsResult>;
    }
 
-   public async getRelationship(relationshipId: string) {
-      return this.rest.get(Routes.userRelationship(relationshipId), { auth: true }) as Promise<APIGetUserRelationshipByIdResult>;
+   public async getRelationship(userId: Snowflake) {
+      return this.rest.get(Routes.userRelationship(userId), { auth: true }) as Promise<APIGetUserRelationshipByIdResult>;
    }
 
-   public async deleteRelationship(relationshipId: string) {
-      return this.rest.delete(Routes.userRelationship(relationshipId), { auth: true });
+   public async deleteRelationship(userId: Snowflake) {
+      return this.rest.delete(Routes.userRelationship(userId), { auth: true });
    }
 }

@@ -48,6 +48,16 @@ export class REST {
    }
 
    /**
+    * Runs a PUT request from the api
+    *
+    * @param fullRoute - The full route to query
+    * @param options - Optional request options
+    */
+   public async put(fullRoute: RouteLike, options: RequestData = {}) {
+      return this.request({ ...options, fullRoute, method: RequestMethod.PUT });
+   }
+
+   /**
     * Runs a PATCH request from the api
     *
     * @param fullRoute - The full route to query

@@ -82,4 +82,18 @@ describe("auth-register", () => {
 
       expect(client.user).toBeDefined();
    });
+   test("auth-register-fourth-successful", async () => {
+      const client = getNewClient();
+
+      const user: RegisterUser = {
+         username: "test4",
+         displayName: "test4",
+         email: "test4@gmail.com",
+         password: "test4",
+      };
+
+      await client.register(user);
+
+      expect(client.user).toBeDefined();
+   });
 });
