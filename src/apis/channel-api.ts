@@ -11,7 +11,6 @@ import {
 import { Routes } from "@shared/routes";
 import { Snowflake } from "@shared/snowflake";
 import { REST } from "../rest/rest";
-import { URLSearchParams } from "url";
 
 export class ChannelAPI {
    private readonly rest: REST;
