@@ -6,6 +6,16 @@ beforeAll(async () => {
 });
 
 describe("message-create", () => {
+   test("message-create-invalid", async () => {
+      const client = await getLoggedClient();
+
+      expect(() => client.channels.createMessage("invalid", { content: "test" })).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.channels.createMessage("000000000000000000", { content: "test" })).toThrow("Unknown Channel"); // Unknown id
+
+      const channel = (await client.channels.getAll())[0];
+
+      expect(() => client.channels.createMessage(channel.id, { content: "" })).toThrow(); // Invalid content
+   });
    test("message-create-successful", async () => {
       const client = await getLoggedClient();
 
@@ -47,21 +57,5 @@ describe("message-create", () => {
       });
 
       expect(() => promise).not.toThrow();
-   });
-   test("message-create-invalid-channel-id", async () => {
-      const client = await getLoggedClient();
-
-      expect(() => client.channels.createMessage("invalid", { content: "test" })).toThrow("Invalid Form Body");
-   });
-   test("message-create-unknown-channel-id", async () => {
-      const client = await getLoggedClient();
-
-      expect(() => client.channels.createMessage("000000000000000000", { content: "test" })).toThrow("Unknown Channel");
-   });
-   test("message-create-invalid-content", async () => {
-      const client = await getLoggedClient();
-
-      const channel = (await client.channels.getAll())[0];
-      expect(() => client.channels.createMessage(channel.id, { content: "" })).toThrow();
    });
 });

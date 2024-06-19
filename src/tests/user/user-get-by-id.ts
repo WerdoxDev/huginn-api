@@ -2,15 +2,11 @@ import { describe, expect, test } from "bun:test";
 import { getLoggedClient } from "../test-utils";
 
 describe("user-get-by-id", () => {
-   test("user-get-by-id-invalid-id", async () => {
+   test("user-get-by-id-invalid", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.get("invalid")).toThrow("Invalid Form Body");
-   });
-   test("user-get-by-id-unknown-id", async () => {
-      const client = await getLoggedClient();
-
-      expect(() => client.users.get("000000000000000000")).toThrow("Unknown User");
+      expect(() => client.users.get("invalid")).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.users.get("000000000000000000")).toThrow("Unknown User"); // Unknown id
    });
    test("user-get-by-id-successful", async () => {
       const client = await getLoggedClient();

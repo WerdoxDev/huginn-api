@@ -3,8 +3,9 @@ import { LoginCredentials } from "@shared/api-types";
 import { getNewClient, testCredentials } from "../test-utils";
 
 describe("auth-login", () => {
-   test("auth-login-invalid-body", async () => {
+   test("auth-login-invalid", async () => {
       const client = getNewClient();
+
       expect(() => client.login({} as LoginCredentials)).toThrow("Invalid Form Body");
    });
 

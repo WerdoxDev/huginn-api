@@ -7,7 +7,7 @@ beforeAll(async () => {
 });
 
 describe("auth-register", () => {
-   test("auth-register-invalid-body", async () => {
+   test("auth-register-invalid", async () => {
       const client = getNewClient();
       expect(() => client.register({} as RegisterUser)).toThrow("Invalid Form Body");
    });

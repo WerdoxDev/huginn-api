@@ -2,6 +2,12 @@ import { describe, expect, test } from "bun:test";
 import { getLoggedClient, test2Credentials } from "../test-utils";
 
 describe("relationship-get", () => {
+   test("relationship-get-by-id-invalid", async () => {
+      const client = await getLoggedClient();
+
+      expect(() => client.users.getRelationship("invalid")).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.users.getRelationship("000000000000000000")).toThrow("Unknown Relationship"); // Unknown id
+   });
    test("relationships-get-all-user", async () => {
       const client = await getLoggedClient();
 
@@ -9,16 +15,6 @@ describe("relationship-get", () => {
 
       expect(relationships).toBeDefined();
       expect(relationships.length).toBeGreaterThan(0);
-   });
-   test("relationship-get-by-id-invalid-id", async () => {
-      const client = await getLoggedClient();
-
-      expect(() => client.users.getRelationship("invalid")).toThrow("Invalid Form Body");
-   });
-   test("relationship-get-by-id-unknown-id", async () => {
-      const client = await getLoggedClient();
-
-      expect(() => client.users.getRelationship("000000000000000000")).toThrow("Unknown Relationship");
    });
    test("relationship-get-by-id-successful", async () => {
       const client = await getLoggedClient();

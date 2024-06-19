@@ -2,19 +2,13 @@ import { describe, expect, test } from "bun:test";
 import { getLoggedClient } from "../test-utils";
 
 describe("message-get", () => {
-   test("message-get-invalid-id", async () => {
+   test("message-get-invalid", async () => {
       const client = await getLoggedClient();
 
       const channel = (await client.channels.getAll())[0];
 
-      expect(() => client.channels.getMessage(channel.id, "invalid")).toThrow("Invalid Form Body");
-   });
-   test("message-get-unknown-id", async () => {
-      const client = await getLoggedClient();
-
-      const channel = (await client.channels.getAll())[0];
-
-      expect(() => client.channels.getMessage(channel.id, "000000000000000000")).toThrow("Unknown Message");
+      expect(() => client.channels.getMessage(channel.id, "invalid")).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.channels.getMessage(channel.id, "000000000000000000")).toThrow("Unknown Message"); // Unknown id
    });
    test(
       "message-get-channel-messages-successful",

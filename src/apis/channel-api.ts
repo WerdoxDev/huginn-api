@@ -1,4 +1,5 @@
 import {
+   APIDeleteRemoveDMResult,
    APIGetChannelByIdResult,
    APIGetChannelMessagesResult,
    APIGetMessageByIdResult,
@@ -40,6 +41,10 @@ export class ChannelAPI {
 
    public async createDm(body: APIPostCreateDMJSONBody) {
       return this.rest.post(Routes.userChannels(), { body, auth: true }) as Promise<APIPostCreateDMResult>;
+   }
+
+   public async removeDm(channelId: Snowflake) {
+      return this.rest.delete(Routes.channel(channelId), { auth: true }) as Promise<APIDeleteRemoveDMResult>;
    }
 
    public async createMessage(channelId: Snowflake, body: APIPostCreateDefaultMessageJSONBody) {
