@@ -5,7 +5,12 @@ describe("user-get-by-id", () => {
    test("user-get-by-id-invalid-id", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.get("invalid")).toThrow("Unknown User");
+      expect(() => client.users.get("invalid")).toThrow("Invalid Form Body");
+   });
+   test("user-get-by-id-unknown-id", async () => {
+      const client = await getLoggedClient();
+
+      expect(() => client.users.get("000000000000000000")).toThrow("Unknown User");
    });
    test("user-get-by-id-successful", async () => {
       const client = await getLoggedClient();

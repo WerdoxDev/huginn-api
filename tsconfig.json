@@ -10,11 +10,14 @@
       "composite": true,
       "strict": true,
       "downlevelIteration": true,
-      "skipLibCheck": false,
+      "skipLibCheck": true,
       "jsx": "react-jsx",
       "allowSyntheticDefaultImports": true,
       "forceConsistentCasingInFileNames": true,
       "allowJs": true,
+      "outDir": "./dist",
+      "declaration": true,
+      "declarationMap": true,
       "paths": {
          "@shared/*": ["../huginn-shared/lib/*"]
       }

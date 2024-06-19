@@ -10,10 +10,15 @@ describe("relationship-get", () => {
       expect(relationships).toBeDefined();
       expect(relationships.length).toBeGreaterThan(0);
    });
-   test("relationship-get-by-id-invalid", async () => {
+   test("relationship-get-by-id-invalid-id", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.getRelationship("invalid")).toThrow("Unknown Relationship");
+      expect(() => client.users.getRelationship("invalid")).toThrow("Invalid Form Body");
+   });
+   test("relationship-get-by-id-unknown-id", async () => {
+      const client = await getLoggedClient();
+
+      expect(() => client.users.getRelationship("000000000000000000")).toThrow("Unknown Relationship");
    });
    test("relationship-get-by-id-successful", async () => {
       const client = await getLoggedClient();

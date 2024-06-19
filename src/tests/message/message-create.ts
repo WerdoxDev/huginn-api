@@ -51,7 +51,12 @@ describe("message-create", () => {
    test("message-create-invalid-channel-id", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.channels.createMessage("invalid", { content: "test" })).toThrow("Unknown Channel");
+      expect(() => client.channels.createMessage("invalid", { content: "test" })).toThrow("Invalid Form Body");
+   });
+   test("message-create-unknown-channel-id", async () => {
+      const client = await getLoggedClient();
+
+      expect(() => client.channels.createMessage("000000000000000000", { content: "test" })).toThrow("Unknown Channel");
    });
    test("message-create-invalid-content", async () => {
       const client = await getLoggedClient();

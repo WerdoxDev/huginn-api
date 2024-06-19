@@ -12,6 +12,11 @@ describe("relationship-delete", () => {
    test("relationship-delete-invalid-id", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.deleteRelationship("invalid")).toThrow("Unknown Relationship");
+      expect(() => client.users.deleteRelationship("invalid")).toThrow("Invalid Form Body");
+   });
+   test("relationship-delete-unknown-id", async () => {
+      const client = await getLoggedClient();
+
+      expect(() => client.users.deleteRelationship("000000000000000000")).toThrow("Unknown Relationship");
    });
 });

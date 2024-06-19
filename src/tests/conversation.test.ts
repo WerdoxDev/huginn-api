@@ -10,15 +10,24 @@ describe("conversation", () => {
       const client = await getLoggedClient();
       const secondClient = await getLoggedClient(test2Credentials);
 
+      try {
+         await client.users.edit({ username: "LokiFan92", displayName: "LokiFan92", password: "test" });
+         await secondClient.users.edit({ username: "ThorEnthusiast", displayName: "ThorEnthusiast", password: "test2" });
+      } catch (e) {}
+
       const channel = (await client.channels.getAll())[0];
       const secondChannel = (await client.channels.getAll())[1];
 
-      await client.channels.createMessage(channel.id, { content: "HI!" });
-      await secondClient.channels.createMessage(channel.id, { content: "Oh hi bro!" });
-      await client.channels.createMessage(channel.id, { content: "Wanna break from the ads?" });
-      await secondClient.channels.createMessage(channel.id, { content: "Hmmm yea sure!" });
-      await client.channels.createMessage(channel.id, { content: "THEN LETS GO" });
-      await secondClient.channels.createMessage(channel.id, { content: "omw" });
+      await client.channels.createMessage(channel.id, {
+         content: "Hey ThorEnthusiast! Did you know **Odin** is called the All-Father?",
+      });
+      await secondClient.channels.createMessage(channel.id, { content: "Yeah, _he even sacrificed an eye for wisdom!_" });
+      await client.channels.createMessage(channel.id, { content: "One of my faves. Have you heard about **Tyr** and **Fenrir**?" });
+      await secondClient.channels.createMessage(channel.id, { content: "You mean where ||Fenrir bites off|| Tyr's hand?" });
+      await client.channels.createMessage(channel.id, { content: "Norse myths are so deep and dramatic." });
+      await secondClient.channels.createMessage(channel.id, { content: "Yes! We should discuss more myths soon." });
+      await client.channels.createMessage(channel.id, { content: "Definitely. Catch you later!" });
+      await secondClient.channels.createMessage(channel.id, { content: "See you!" });
 
       await client.channels.createMessage(secondChannel.id, { content: "Emam zaman" });
       await secondClient.channels.createMessage(secondChannel.id, { content: "Janam?" });

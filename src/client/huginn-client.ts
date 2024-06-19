@@ -82,6 +82,7 @@ export class HuginnClient {
 
       this.tokenHandler.token = null!;
       this.user = undefined;
+      this.gateway.close();
    }
 
    public get isLoggedIn() {

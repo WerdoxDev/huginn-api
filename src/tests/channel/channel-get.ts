@@ -13,7 +13,12 @@ describe("channel-get", () => {
    test("channel-get-by-id-invalid-id", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.channels.get("invalid")).toThrow("Unknown Channel");
+      expect(() => client.channels.get("invalid")).toThrow("Invalid Form Body");
+   });
+   test("channel-get-by-id-invalid-id", async () => {
+      const client = await getLoggedClient();
+
+      expect(() => client.channels.get("000000000000000000")).toThrow("Unknown Channel");
    });
    test("channel-get-by-id-successful", async () => {
       const client = await getLoggedClient();

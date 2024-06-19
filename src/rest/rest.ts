@@ -111,7 +111,7 @@ export class REST {
 
       if (request.auth) {
          if (!this.client.tokenHandler.token) {
-            throw new Error("Expected token for a request, but wasn't present");
+            throw new Error("Expected token for a request, but wasn't present " + request.fullRoute);
          }
 
          headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.client.tokenHandler.token}`;

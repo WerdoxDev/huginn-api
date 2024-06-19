@@ -7,7 +7,14 @@ describe("message-get", () => {
 
       const channel = (await client.channels.getAll())[0];
 
-      expect(() => client.channels.getMessage(channel.id, "invalid")).toThrow("Unknown Message");
+      expect(() => client.channels.getMessage(channel.id, "invalid")).toThrow("Invalid Form Body");
+   });
+   test("message-get-unknown-id", async () => {
+      const client = await getLoggedClient();
+
+      const channel = (await client.channels.getAll())[0];
+
+      expect(() => client.channels.getMessage(channel.id, "000000000000000000")).toThrow("Unknown Message");
    });
    test(
       "message-get-channel-messages-successful",

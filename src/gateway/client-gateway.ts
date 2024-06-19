@@ -4,6 +4,7 @@ import { DefaultGatewayOptions } from "./constants";
 import { isDispatchOpcode, isHelloOpcode } from "./gateway-utils";
 import { GatewayOptions } from "../..";
 import EventEmitter from "eventemitter3";
+import { MessageEvent, CloseEvent, Event } from "ws";
 
 export class Gateway extends EventEmitter {
    public readonly options: GatewayOptions;
@@ -24,8 +25,7 @@ export class Gateway extends EventEmitter {
 
    public connect() {
       if (!this.client.isLoggedIn) {
-         console.error("Trying to connect gateway before client initialization!");
-         return;
+         throw new Error("Trying to connect gateway before client initialization!");
       }
 
       this.socket = this.options.createSocket(this.options.url);
@@ -34,30 +34,44 @@ export class Gateway extends EventEmitter {
       this.startListening();
    }
 
-   startListening() {
-      this.socket?.addEventListener("open", (_e) => {
-         console.log("Gateway Connected!");
-      });
+   private startListening() {
+      this.socket?.removeEventListener("open", this.onOpen);
+      this.socket?.removeEventListener("close", this.onClose);
+      this.socket?.removeEventListener("message", this.onMessage);
 
-      this.socket?.addEventListener("close", (e) => {
-         console.log(`Gateway Closed with code: ${e.code}`);
-         this.stopHeartbeat();
-      });
+      this.socket?.addEventListener("open", this.onOpen.bind(this));
 
-      this.socket?.addEventListener("message", (e) => {
-         if (typeof e.data !== "string") {
-            console.error("Non string messages are not yet supported");
-            return;
-         }
+      this.socket?.addEventListener("close", this.onClose.bind(this));
 
-         const data = JSON.parse(e.data);
+      this.socket?.addEventListener("message", this.onMessage.bind(this));
+   }
 
-         if (isHelloOpcode(data)) {
-            this.handleHello(data);
-         } else if (isDispatchOpcode(data)) {
-            this.emit(data.t, data.d);
-         }
-      });
+   private onOpen(_e: Event) {
+      console.log("Gateway Connected!");
+   }
+
+   private onClose(this: Gateway, e: CloseEvent) {
+      console.log(`Gateway Closed with code: ${e.code}`);
+      this.stopHeartbeat();
+   }
+
+   private onMessage(e: MessageEvent) {
+      if (typeof e.data !== "string") {
+         console.error("Non string messages are not yet supported");
+         return;
+      }
+
+      const data = JSON.parse(e.data);
+
+      if (isHelloOpcode(data)) {
+         this.handleHello(data);
+      } else if (isDispatchOpcode(data)) {
+         this.emit(data.t, data.d);
+      }
+   }
+
+   public close() {
+      this.socket?.close();
    }
 
    private handleHello(data: GatewayHello) {
