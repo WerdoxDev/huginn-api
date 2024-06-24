@@ -11,15 +11,15 @@ describe("channel-create-dm", () => {
    test("channel-create-dm-invalid", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.channels.createDm({} as APIPostCreateDMJSONBody)).toThrow("Invalid Form Body"); // Invalid
-      expect(() => client.channels.createDm({ recipients: [] } as APIPostCreateDMJSONBody)).toThrow("Invalid Form Body"); // Invalid id
-      expect(() => client.channels.createDm({ recipients: ["000000000000000000"] })).toThrow("Unknown User"); // Unknown id
+      expect(() => client.channels.createDM({} as APIPostCreateDMJSONBody)).toThrow("Invalid Form Body"); // Invalid
+      expect(() => client.channels.createDM({ recipients: [] } as APIPostCreateDMJSONBody)).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.channels.createDM({ recipients: ["000000000000000000"] })).toThrow("Unknown User"); // Unknown id
    });
    test("channel-create-single-dm-successful", async () => {
       const client = await getLoggedClient();
       const secondClient = await getLoggedClient(test2Credentials);
 
-      const result = await client.channels.createDm({ recipients: [secondClient.user!.id] });
+      const result = await client.channels.createDM({ recipients: [secondClient.user!.id] });
 
       expect(result).toBeDefined();
       expect(containsId(result.recipients, secondClient.user!.id)).toBe(true);
@@ -29,7 +29,7 @@ describe("channel-create-dm", () => {
       const secondClient = await getLoggedClient(test2Credentials);
       const thirdClient = await getLoggedClient(test3Credentials);
 
-      const result = (await client.channels.createDm({
+      const result = (await client.channels.createDM({
          recipients: [secondClient.user!.id, thirdClient.user!.id],
       })) as APIGroupDMChannel;
 

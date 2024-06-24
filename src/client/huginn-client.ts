@@ -8,6 +8,7 @@ import { Gateway } from "../gateway/client-gateway";
 import { REST } from "../rest/rest";
 import { TokenHandler } from "../rest/token-handler";
 import { createDefaultClientOptions } from "../utils";
+import { snowflake } from "@shared/snowflake";
 
 export class HuginnClient {
    public readonly options: ClientOptions;
@@ -87,5 +88,10 @@ export class HuginnClient {
 
    public get isLoggedIn() {
       return this.user !== undefined;
+   }
+
+   public generateNonce() {
+      const nonce = snowflake.generateString();
+      return nonce;
    }
 }

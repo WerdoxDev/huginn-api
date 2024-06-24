@@ -6,8 +6,8 @@ describe("channel-remove-dm", () => {
    test("channel-remove-dm-invalid", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.channels.removeDm("invalid")).toThrow("Invalid Form Body");
-      expect(() => client.channels.removeDm("000000000000000000")).toThrow("Unknown Channel");
+      expect(() => client.channels.deleteDM("invalid")).toThrow("Invalid Form Body");
+      expect(() => client.channels.deleteDM("000000000000000000")).toThrow("Unknown Channel");
    });
    test("channel-remove-dm-successful", async () => {
       const client = await getLoggedClient();
@@ -16,7 +16,7 @@ describe("channel-remove-dm", () => {
       const channels = await client.channels.getAll();
       const channel = channels.find((x) => x.type === ChannelType.DM && x.recipients.some((x) => x.id === secondClient.user!.id))!;
 
-      const result = await client.channels.removeDm(channel.id);
+      const result = await client.channels.deleteDM(channel.id);
 
       expect(result).toBeDefined();
       expect(result.id).toBe(channel.id);
@@ -31,7 +31,7 @@ describe("channel-remove-dm", () => {
 
       const channels = await client.channels.getAll();
 
-      await client.channels.createDm({ recipients: [secondClient.user!.id] });
+      await client.channels.createDM({ recipients: [secondClient.user!.id] });
 
       const newChannels = await client.channels.getAll();
 

@@ -1,13 +1,13 @@
 import {
-   APIDeleteRemoveDMResult,
+   APIDeleteDMChannelResult,
    APIGetChannelByIdResult,
    APIGetChannelMessagesResult,
    APIGetMessageByIdResult,
    APIGetUserChannelsResult,
-   APIPostCreateDMJSONBody,
-   APIPostCreateDMResult,
-   APIPostCreateDefaultMessageJSONBody,
-   APIPostCreateDefaultMessageResult,
+   APIPostDMChannelJSONBody,
+   APIPostDMChannelResult,
+   APIPostDefaultMessageJSONBody,
+   APIPostDefaultMessageResult,
 } from "@shared/api-types";
 import { Routes } from "@shared/routes";
 import { Snowflake } from "@shared/snowflake";
@@ -39,16 +39,16 @@ export class ChannelAPI {
       }) as Promise<APIGetChannelMessagesResult>;
    }
 
-   public async createDm(body: APIPostCreateDMJSONBody) {
-      return this.rest.post(Routes.userChannels(), { body, auth: true }) as Promise<APIPostCreateDMResult>;
+   public async createDM(body: APIPostDMChannelJSONBody) {
+      return this.rest.post(Routes.userChannels(), { body, auth: true }) as Promise<APIPostDMChannelResult>;
    }
 
-   public async removeDm(channelId: Snowflake) {
-      return this.rest.delete(Routes.channel(channelId), { auth: true }) as Promise<APIDeleteRemoveDMResult>;
+   public async deleteDM(channelId: Snowflake) {
+      return this.rest.delete(Routes.channel(channelId), { auth: true }) as Promise<APIDeleteDMChannelResult>;
    }
 
-   public async createMessage(channelId: Snowflake, body: APIPostCreateDefaultMessageJSONBody) {
-      return this.rest.post(Routes.channelMessages(channelId), { body, auth: true }) as Promise<APIPostCreateDefaultMessageResult>;
+   public async createMessage(channelId: Snowflake, body: APIPostDefaultMessageJSONBody) {
+      return this.rest.post(Routes.channelMessages(channelId), { body, auth: true }) as Promise<APIPostDefaultMessageResult>;
    }
 
    public async typing(channelId: Snowflake) {
