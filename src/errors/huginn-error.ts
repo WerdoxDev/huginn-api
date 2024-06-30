@@ -43,7 +43,6 @@ export class HuginnAPIError extends Error {
       return `${HuginnAPIError.name}[${this.code}]`;
    }
 
-   // eslint-disable-next-line consistent-return
    private static *flattenHuginnError(obj: HuginnError | HuginnErrorGroupWrapper, key = ""): IterableIterator<string> {
       if (isErrorResponse(obj)) {
          return yield `${key.length ? `${key}[${obj.code}]` : `${obj.code}`}: ${obj.message}`.trim();

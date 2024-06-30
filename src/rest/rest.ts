@@ -97,7 +97,7 @@ export class REST {
     *
     * @param request - The request data
     */
-   public async resolveRequest(request: InternalRequest): Promise<ResolvedRequest> {
+   public resolveRequest(request: InternalRequest): ResolvedRequest {
       let query = "";
       let finalBody: RequestInit["body"];
       let additionalHeaders: Record<string, string> = {};

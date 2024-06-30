@@ -31,9 +31,9 @@ describe("message-create", () => {
 
          const channel = (await client.channels.getAll())[0];
 
-         const promise = new Promise(async (resolve) => {
+         const promise = new Promise((resolve) => {
             for (let i = 0; i < 55; i++) {
-               await client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
+               client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
             }
 
             resolve(true);
@@ -48,9 +48,9 @@ describe("message-create", () => {
 
       const channel = (await client.channels.getAll())[1];
 
-      const promise = new Promise(async (resolve) => {
+      const promise = new Promise((resolve) => {
          for (let i = 0; i < 10; i++) {
-            await client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
+            client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
          }
 
          resolve(true);

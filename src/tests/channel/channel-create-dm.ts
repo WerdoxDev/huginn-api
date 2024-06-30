@@ -1,18 +1,18 @@
 import { beforeAll, describe, expect, test } from "bun:test";
 import { getLoggedClient, test2Credentials, test3Credentials, url } from "../test-utils";
 import { Snowflake } from "@shared/snowflake";
-import { APIChannelUser, APIGroupDMChannel, APIPostCreateDMJSONBody } from "@shared/api-types";
+import { APIChannelUser, APIGroupDMChannel, APIPostDMChannelJSONBody } from "@shared/api-types";
 
 beforeAll(async () => {
-   fetch(`http://${url}/test/test-channels`, { method: "POST" });
+   await fetch(`http://${url}/test/test-channels`, { method: "POST" });
 });
 
 describe("channel-create-dm", () => {
    test("channel-create-dm-invalid", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.channels.createDM({} as APIPostCreateDMJSONBody)).toThrow("Invalid Form Body"); // Invalid
-      expect(() => client.channels.createDM({ recipients: [] } as APIPostCreateDMJSONBody)).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.channels.createDM({} as APIPostDMChannelJSONBody)).toThrow("Invalid Form Body"); // Invalid
+      expect(() => client.channels.createDM({ recipients: [] } as APIPostDMChannelJSONBody)).toThrow("Invalid Form Body"); // Invalid id
       expect(() => client.channels.createDM({ recipients: ["000000000000000000"] })).toThrow("Unknown User"); // Unknown id
    });
    test("channel-create-single-dm-successful", async () => {

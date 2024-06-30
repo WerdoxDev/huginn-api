@@ -1,6 +1,6 @@
 {
    "compilerOptions": {
-      "lib": ["ESNext"],
+      "lib": ["ESNext", "DOM", "DOM.Iterable"],
       "module": "esnext",
       "target": "esnext",
       "moduleResolution": "bundler",
@@ -11,11 +11,13 @@
       "strict": true,
       "downlevelIteration": true,
       "skipLibCheck": true,
+      "isolatedModules": true,
       "jsx": "react-jsx",
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
       "allowSyntheticDefaultImports": true,
       "forceConsistentCasingInFileNames": true,
       "allowJs": true,
-      "outDir": "./dist",
       "declaration": true,
       "declarationMap": true,
       "paths": {

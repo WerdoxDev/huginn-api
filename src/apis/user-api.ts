@@ -5,7 +5,7 @@ import {
    APIGetUserResult,
    APIPatchCurrentUserJSONBody,
    APIPatchCurrentUserResult,
-   APIPostCreateRelationshipJSONBody,
+   APIPostRelationshipJSONBody,
 } from "@shared/api-types";
 import { Routes } from "@shared/routes";
 import { Snowflake } from "@shared/snowflake";
@@ -30,7 +30,7 @@ export class UserAPI {
       return this.rest.patch(Routes.user("@me"), { body, auth: true }) as Promise<APIPatchCurrentUserResult>;
    }
 
-   public async createRelationship(body: APIPostCreateRelationshipJSONBody) {
+   public async createRelationship(body: APIPostRelationshipJSONBody) {
       return this.rest.post(Routes.userRelationships(), { body, auth: true });
    }
 

@@ -35,7 +35,7 @@ export class ChannelAPI {
    public async getMessages(channelId: Snowflake, limit?: number) {
       return this.rest.get(Routes.channelMessages(channelId), {
          auth: true,
-         query: new URLSearchParams({ limit: limit?.toString() || "" }),
+         query: new URLSearchParams({ limit: limit?.toString() ?? "" }),
       }) as Promise<APIGetChannelMessagesResult>;
    }
 

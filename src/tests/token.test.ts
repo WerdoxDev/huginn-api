@@ -3,7 +3,7 @@ import { getNewClient, testCredentials } from "./test-utils";
 
 describe("auth-token", () => {
    test("auth-refresh-token", async () => {
-      const client = await getNewClient();
+      const client = getNewClient();
 
       expect(await client.tokenHandler.waitForTokenRefresh()).toBe(false);
 

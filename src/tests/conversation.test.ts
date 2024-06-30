@@ -14,7 +14,9 @@ describe("conversation", () => {
       try {
          await client.users.edit({ displayName: "LokiFan92", password: "test" });
          await secondClient.users.edit({ displayName: "ThorEnthusiast", password: "test2" });
-      } catch (e) {}
+      } catch (e) {
+         /* empty */
+      }
 
       const channel = (await client.channels.getAll()).find((x) => x.type === ChannelType.DM)!;
       // const secondChannel = (await client.channels.getAll())[1];

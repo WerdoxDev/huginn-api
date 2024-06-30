@@ -7,12 +7,12 @@ beforeAll(async () => {
 });
 
 describe("auth-register", () => {
-   test("auth-register-invalid", async () => {
+   test("auth-register-invalid", () => {
       const client = getNewClient();
       expect(() => client.register({} as RegisterUser)).toThrow("Invalid Form Body");
    });
 
-   test("auth-register-short-username-password", async () => {
+   test("auth-register-short-username-password", () => {
       const client = getNewClient();
 
       const user: RegisterUser = {
@@ -40,7 +40,7 @@ describe("auth-register", () => {
       expect(client.user).toBeDefined();
    });
 
-   test("auth-register-repeated-invalid", async () => {
+   test("auth-register-repeated-invalid", () => {
       const client = getNewClient();
 
       const user: RegisterUser = {

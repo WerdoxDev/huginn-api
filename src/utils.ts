@@ -5,7 +5,7 @@ import { DefaultGatewayOptions } from "./gateway/constants";
 import { DefaultRestOptions } from "./rest/rest-utils";
 import { ClientOptions } from "..";
 
-export async function parseResponse(response: ResponseLike): Promise<unknown> {
+export function parseResponse(response: ResponseLike): Promise<unknown> {
    if (response.headers.get("Content-Type")?.startsWith("application/json")) {
       return response.json();
    }

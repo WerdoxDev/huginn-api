@@ -1,17 +1,17 @@
+/* eslint-disable @typescript-eslint/unbound-method */
 import { GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations } from "@shared/gateway-types";
 import { HuginnClient } from "..";
 import { DefaultGatewayOptions } from "./constants";
 import { isDispatchOpcode, isHelloOpcode } from "./gateway-utils";
 import { GatewayOptions } from "../..";
 import EventEmitter from "eventemitter3";
-import { MessageEvent, CloseEvent, Event } from "ws";
 
 export class Gateway extends EventEmitter {
    public readonly options: GatewayOptions;
    private readonly client: HuginnClient;
 
    private socket?: WebSocket;
-   private heartbeatInterval?: Timer;
+   private heartbeatInterval?: ReturnType<typeof setTimeout>;
    private sequence: number | null;
 
    public constructor(client: HuginnClient, options: Partial<GatewayOptions> = {}) {
@@ -40,9 +40,7 @@ export class Gateway extends EventEmitter {
       this.socket?.removeEventListener("message", this.onMessage);
 
       this.socket?.addEventListener("open", this.onOpen.bind(this));
-
       this.socket?.addEventListener("close", this.onClose.bind(this));
-
       this.socket?.addEventListener("message", this.onMessage.bind(this));
    }
 
@@ -50,7 +48,7 @@ export class Gateway extends EventEmitter {
       console.log("Gateway Connected!");
    }
 
-   private onClose(this: Gateway, e: CloseEvent) {
+   private onClose(e: CloseEvent) {
       console.log(`Gateway Closed with code: ${e.code}`);
       this.stopHeartbeat();
    }
