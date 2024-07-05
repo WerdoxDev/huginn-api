@@ -4,7 +4,7 @@ import { RequestBody } from "@shared/errors";
 export class HTTPError extends Error {
    public requestBody: RequestBody;
 
-   public override name = HTTPError.name;
+   public override name: string = HTTPError.name;
 
    /**
     * @param status - The status code of the response

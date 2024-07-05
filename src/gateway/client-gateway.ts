@@ -3,7 +3,7 @@ import { GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations } fr
 import { HuginnClient } from "..";
 import { DefaultGatewayOptions } from "./constants";
 import { isDispatchOpcode, isHelloOpcode } from "./gateway-utils";
-import { GatewayOptions } from "../..";
+import { GatewayOptions } from "../types";
 import EventEmitter from "eventemitter3";
 
 export class Gateway extends EventEmitter {
@@ -23,7 +23,7 @@ export class Gateway extends EventEmitter {
       this.sequence = null;
    }
 
-   public connect() {
+   public connect(): void {
       if (!this.client.isLoggedIn) {
          throw new Error("Trying to connect gateway before client initialization!");
       }
@@ -68,7 +68,7 @@ export class Gateway extends EventEmitter {
       }
    }
 
-   public close() {
+   public close(): void {
       this.socket?.close();
    }
 

@@ -9,7 +9,7 @@ export class CommonAPI {
       this.rest = rest;
    }
 
-   public async uniqueUsername(body: APIPostUniqueUsernameJSONBody) {
+   public async uniqueUsername(body: APIPostUniqueUsernameJSONBody): Promise<APIPostUniqueUsernameResult> {
       return this.rest.post(Routes.uniqueUsername(), { body }) as Promise<APIPostUniqueUsernameResult>;
    }
 }

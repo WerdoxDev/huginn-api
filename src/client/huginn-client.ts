@@ -1,14 +1,14 @@
 import { APIUser, LoginCredentials, RegisterUser, Tokens } from "@shared/api-types";
-import { ClientOptions } from "../..";
-import { AuthAPI } from "../apis/auth-api";
-import { ChannelAPI } from "../apis/channel-api";
-import { CommonAPI } from "../apis/common-api";
-import { UserAPI } from "../apis/user-api";
+import { ClientOptions } from "../types";
+import { AuthAPI } from "../apis/auth";
+import { ChannelAPI } from "../apis/channel";
+import { CommonAPI } from "../apis/common";
+import { UserAPI } from "../apis/user";
 import { Gateway } from "../gateway/client-gateway";
 import { REST } from "../rest/rest";
 import { TokenHandler } from "../rest/token-handler";
 import { createDefaultClientOptions } from "../utils";
-import { snowflake } from "@shared/snowflake";
+import { Snowflake, snowflake } from "@shared/snowflake";
 
 export class HuginnClient {
    public readonly options: ClientOptions;
@@ -40,7 +40,7 @@ export class HuginnClient {
       this.gateway = new Gateway(this, this.options.gateway);
    }
 
-   async initializeWithToken(tokens: Partial<Tokens>) {
+   async initializeWithToken(tokens: Partial<Tokens>): Promise<void> {
       try {
          if (tokens.token) {
             this.tokenHandler.token = tokens.token;
@@ -62,7 +62,7 @@ export class HuginnClient {
       }
    }
 
-   public async login(credentials: LoginCredentials) {
+   public async login(credentials: LoginCredentials): Promise<void> {
       const result = await this.auth.login(credentials);
 
       this.user = { ...result };
@@ -70,7 +70,7 @@ export class HuginnClient {
       this.tokenHandler.refreshToken = result.refreshToken;
    }
 
-   public async register(user: RegisterUser) {
+   public async register(user: RegisterUser): Promise<void> {
       const result = await this.auth.register(user);
 
       this.user = { ...result };
@@ -78,7 +78,7 @@ export class HuginnClient {
       this.tokenHandler.refreshToken = result.refreshToken;
    }
 
-   public async logout() {
+   public async logout(): Promise<void> {
       await this.auth.logout();
 
       this.tokenHandler.token = null!;
@@ -86,11 +86,11 @@ export class HuginnClient {
       this.gateway.close();
    }
 
-   public get isLoggedIn() {
+   public get isLoggedIn(): boolean {
       return this.user !== undefined;
    }
 
-   public generateNonce() {
+   public generateNonce(): Snowflake {
       const nonce = snowflake.generateString();
       return nonce;
    }

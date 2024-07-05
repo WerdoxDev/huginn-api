@@ -33,7 +33,7 @@ export const editCredentials: LoginCredentials = {
    password: "test-edited",
 };
 
-export async function getLoggedClient(credentials: LoginCredentials = testCredentials) {
+export async function getLoggedClient(credentials: LoginCredentials = testCredentials): Promise<HuginnClient> {
    const client = new HuginnClient({ rest: { api: `http://${url}` }, gateway: { url: `ws://${url}` } });
 
    await client.login(credentials);
@@ -41,7 +41,7 @@ export async function getLoggedClient(credentials: LoginCredentials = testCreden
    return client;
 }
 
-export function getNewClient() {
+export function getNewClient(): HuginnClient {
    const client = new HuginnClient({ rest: { api: `http://${url}` }, gateway: { url: `ws://${url}` } });
    return client;
 }

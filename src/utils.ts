@@ -3,7 +3,7 @@ import { TokenPayload } from "@shared/api-types";
 import * as jose from "jose";
 import { DefaultGatewayOptions } from "./gateway/constants";
 import { DefaultRestOptions } from "./rest/rest-utils";
-import { ClientOptions } from "..";
+import { ClientOptions } from "./types";
 
 export function parseResponse(response: ResponseLike): Promise<unknown> {
    if (response.headers.get("Content-Type")?.startsWith("application/json")) {

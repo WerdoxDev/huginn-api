@@ -10,7 +10,7 @@ import {
 } from "@shared/rest-types";
 import { RouteLike } from "@shared/routes";
 import { HuginnClient } from "..";
-import { RESTOptions } from "../..";
+import { RESTOptions } from "../types";
 import { HTTPError } from "../errors/http-error";
 import { HuginnAPIError } from "../errors/huginn-error";
 import { parseResponse } from "../utils";
@@ -33,7 +33,7 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async get(fullRoute: RouteLike, options: RequestData = {}) {
+   public async get(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.GET });
    }
 
@@ -43,7 +43,7 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async post(fullRoute: RouteLike, options: RequestData = {}) {
+   public async post(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.POST });
    }
 
@@ -53,7 +53,7 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async put(fullRoute: RouteLike, options: RequestData = {}) {
+   public async put(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.PUT });
    }
 
@@ -63,7 +63,7 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async patch(fullRoute: RouteLike, options: RequestData = {}) {
+   public async patch(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.PATCH });
    }
 
@@ -73,7 +73,7 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async delete(fullRoute: RouteLike, options: RequestData = {}) {
+   public async delete(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.DELETE });
    }
 
@@ -82,8 +82,8 @@ export class REST {
     *
     * @param options - Request options
     */
-   public async request(options: InternalRequest) {
-      const { url, fetchOptions } = await this.resolveRequest(options);
+   public async request(options: InternalRequest): Promise<unknown> {
+      const { url, fetchOptions } = this.resolveRequest(options);
 
       const response = await this.options.makeRequest(url, fetchOptions);
 
@@ -141,7 +141,12 @@ export class REST {
       return { url, fetchOptions };
    }
 
-   public async handleErrors(response: ResponseLike, method: string, url: string, requestData: HandlerRequestData) {
+   public async handleErrors(
+      response: ResponseLike,
+      method: string,
+      url: string,
+      requestData: HandlerRequestData
+   ): Promise<ResponseLike> {
       const status = response.status;
 
       if (status >= 500 && status < 600) {
