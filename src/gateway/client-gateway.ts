@@ -1,22 +1,33 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations } from "@shared/gateway-types";
+import { GatewayEvents, GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations } from "@shared/gateway-types";
+import EventEmitter from "eventemitter3";
 import { HuginnClient } from "..";
+import { GatewayOptions } from "../types";
 import { DefaultGatewayOptions } from "./constants";
 import { isDispatchOpcode, isHelloOpcode } from "./gateway-utils";
-import { GatewayOptions } from "../types";
-import EventEmitter from "eventemitter3";
 
-export class Gateway extends EventEmitter {
+export class Gateway {
    public readonly options: GatewayOptions;
    private readonly client: HuginnClient;
+   private emitter = new EventEmitter();
 
    private socket?: WebSocket;
    private heartbeatInterval?: ReturnType<typeof setTimeout>;
    private sequence: number | null;
 
-   public constructor(client: HuginnClient, options: Partial<GatewayOptions> = {}) {
-      super();
+   private emit<EventName extends keyof GatewayEvents>(eventName: EventName, eventArg: GatewayEvents[EventName]): void {
+      this.emitter.emit(eventName, eventArg);
+   }
 
+   on<EventName extends keyof GatewayEvents>(eventName: EventName, handler: (eventArg: GatewayEvents[EventName]) => void): void {
+      this.emitter.on(eventName, handler);
+   }
+
+   off<EventName extends keyof GatewayEvents>(eventName: EventName, handler: (eventArg: GatewayEvents[EventName]) => void): void {
+      this.emitter.off(eventName, handler);
+   }
+
+   public constructor(client: HuginnClient, options: Partial<GatewayOptions> = {}) {
       this.options = { ...DefaultGatewayOptions, ...options };
       this.client = client;
 
@@ -45,12 +56,17 @@ export class Gateway extends EventEmitter {
    }
 
    private onOpen(_e: Event) {
-      console.log("Gateway Connected!");
+      if (this.options.log) {
+         console.log("Gateway Connected!");
+      }
    }
 
    private onClose(e: CloseEvent) {
-      console.log(`Gateway Closed with code: ${e.code}`);
+      if (this.options.log) {
+         console.log(`Gateway Closed with code: ${e.code}`);
+      }
       this.stopHeartbeat();
+      this.emit("close", e.code);
    }
 
    private onMessage(e: MessageEvent) {
@@ -62,7 +78,11 @@ export class Gateway extends EventEmitter {
       const data = JSON.parse(e.data);
 
       if (isHelloOpcode(data)) {
-         this.handleHello(data);
+         if (this.options.identify) {
+            this.handleHello(data);
+         } else {
+            this.emit("hello", data.d);
+         }
       } else if (isDispatchOpcode(data)) {
          this.emit(data.t, data.d);
       }
@@ -90,7 +110,9 @@ export class Gateway extends EventEmitter {
    private startHeartbeat(interval: number) {
       this.heartbeatInterval = setInterval(() => {
          const data: GatewayHeartbeat = { op: GatewayOperations.HEARTBEAT, d: this.sequence };
-         console.log("Sending Heartbeat");
+         if (this.options.log) {
+            console.log("Sending Heartbeat");
+         }
          this.send(data);
       }, interval);
    }
@@ -99,7 +121,7 @@ export class Gateway extends EventEmitter {
       clearInterval(this.heartbeatInterval);
    }
 
-   private send(data: unknown) {
+   public send(data: unknown): void {
       this.socket?.send(JSON.stringify(data));
    }
 }
