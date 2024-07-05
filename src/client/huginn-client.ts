@@ -9,12 +9,14 @@ import { REST } from "../rest/rest";
 import { TokenHandler } from "../rest/token-handler";
 import { createDefaultClientOptions } from "../utils";
 import { Snowflake, snowflake } from "@shared/snowflake";
+import { RelationshipAPI } from "../apis/relationship";
 
 export class HuginnClient {
    public readonly options: ClientOptions;
    private rest: REST;
    public tokenHandler: TokenHandler;
    public users: UserAPI;
+   public relationships: RelationshipAPI;
    public auth: AuthAPI;
    public channels: ChannelAPI;
    public common: CommonAPI;
@@ -33,9 +35,10 @@ export class HuginnClient {
       this.tokenHandler = new TokenHandler(this);
       this.rest = new REST(this, this.options.rest);
 
-      this.users = new UserAPI(this.rest);
       this.auth = new AuthAPI(this.rest);
+      this.users = new UserAPI(this.rest);
       this.channels = new ChannelAPI(this.rest);
+      this.relationships = new RelationshipAPI(this.rest);
       this.common = new CommonAPI(this.rest);
       this.gateway = new Gateway(this, this.options.gateway);
    }

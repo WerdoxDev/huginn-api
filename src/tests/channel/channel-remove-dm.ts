@@ -1,13 +1,17 @@
 import { describe, expect, test } from "bun:test";
-import { getLoggedClient, test2Credentials } from "../test-utils";
+import { getLoggedClient, test2Credentials, test3Credentials } from "../test-utils";
 import { ChannelType } from "@shared/api-types";
 
 describe("channel-remove-dm", () => {
    test("channel-remove-dm-invalid", async () => {
       const client = await getLoggedClient();
+      const client3 = await getLoggedClient(test3Credentials);
 
-      expect(() => client.channels.deleteDM("invalid")).toThrow("Invalid Form Body");
-      expect(() => client.channels.deleteDM("000000000000000000")).toThrow("Unknown Channel");
+      const channels = (await client.channels.getAll()).filter((x) => x.type === ChannelType.DM);
+
+      expect(() => client.channels.deleteDM("invalid")).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.channels.deleteDM("000000000000000000")).toThrow("Unknown Channel"); // Unknown id
+      expect(() => client3.channels.get(channels[0].id)).toThrow("Unknown Channel"); // None Existance
    });
    test("channel-remove-dm-successful", async () => {
       const client = await getLoggedClient();

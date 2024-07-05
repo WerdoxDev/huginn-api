@@ -5,14 +5,14 @@ describe("relationship-delete", () => {
    test("relationship-delete-invalid", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.deleteRelationship("invalid")).toThrow("Invalid Form Body"); // Invalid id
-      expect(() => client.users.deleteRelationship("000000000000000000")).toThrow("Unknown Relationship"); // Unknown id
+      expect(() => client.relationships.delete("invalid")).toThrow("Invalid Form Body"); // Invalid id
+      expect(() => client.relationships.delete("000000000000000000")).toThrow("Unknown Relationship"); // Unknown id
    });
    test("relationship-delete-success", async () => {
       const client = await getLoggedClient();
 
-      const relationships = await client.users.getRelationships();
+      const relationships = await client.relationships.getAll();
 
-      expect(() => client.users.deleteRelationship(relationships[0].user.id)).not.toThrow();
+      expect(() => client.relationships.delete(relationships[0].user.id)).not.toThrow();
    });
 });

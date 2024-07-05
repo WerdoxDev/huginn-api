@@ -10,33 +10,33 @@ describe("relationship-create", () => {
    test("relationship-create-invalid", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.createRelationship({} as { username: string })).toThrow("Invalid Form Body");
+      expect(() => client.relationships.createRelationship({} as { username: string })).toThrow("Invalid Form Body");
    });
    test("relationship-create-empty-username", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.createRelationship({ username: "" })).toThrow("Invalid Form Body");
+      expect(() => client.relationships.createRelationship({ username: "" })).toThrow("Invalid Form Body");
    });
    test("relationship-create-self-request", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.createRelationship({ username: "test" })).toThrow();
+      expect(() => client.relationships.createRelationship({ username: "test" })).toThrow();
    });
    test("relationship-create-username-successful", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.createRelationship({ username: "test2" })).not.toThrow();
+      expect(() => client.relationships.createRelationship({ username: "test2" })).not.toThrow();
    });
    test("relationship-create-userid-successful", async () => {
       const client = await getLoggedClient(test2Credentials);
       const client2 = await getLoggedClient(test3Credentials);
 
-      expect(() => client.users.createRelationshipByUserId(client2.user!.id)).not.toThrow();
+      expect(() => client.relationships.createRelationshipByUserId(client2.user!.id)).not.toThrow();
    });
    test("relationship-accept-successful", async () => {
       const client = await getLoggedClient(test2Credentials);
 
-      expect(() => client.users.createRelationship({ username: "test" })).not.toThrow();
+      expect(() => client.relationships.createRelationship({ username: "test" })).not.toThrow();
    });
    test("relationship-create-existing-not-accepted", async () => {
       const client = await getLoggedClient(test3Credentials);
@@ -45,10 +45,10 @@ describe("relationship-create", () => {
       expect(client.user).toBeDefined();
       expect(client2.user).toBeDefined();
 
-      await client.users.createRelationship({ username: client2.user!.username });
-      await client2.users.createRelationship({ username: client.user!.username });
+      await client.relationships.createRelationship({ username: client2.user!.username });
+      await client2.relationships.createRelationship({ username: client.user!.username });
 
-      const relationship = (await client.users.getRelationships()).find(
+      const relationship = (await client.relationships.getAll()).find(
          (x) => x.user.id === client2.user!.id && x.type === RelationshipType.FRIEND && x.since !== null
       );
       expect(relationship).toBeDefined();
@@ -56,6 +56,6 @@ describe("relationship-create", () => {
    test("relationship-create-existing", async () => {
       const client = await getLoggedClient();
 
-      expect(() => client.users.createRelationship({ username: "test2" })).toThrow();
+      expect(() => client.relationships.createRelationship({ username: "test2" })).toThrow();
    });
 });
