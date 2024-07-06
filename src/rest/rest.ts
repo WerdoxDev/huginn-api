@@ -16,7 +16,6 @@ import { HuginnAPIError } from "../errors/huginn-error";
 import { parseResponse } from "../utils";
 import { DefaultRestOptions } from "./rest-utils";
 
-// TODO: Implement put, patch, delete... requests
 export class REST {
    public readonly options: RESTOptions;
    private client: HuginnClient;

@@ -19,3 +19,9 @@ export type GatewayOptions = {
    log: boolean;
    createSocket(url: string): WebSocket;
 };
+
+export enum ClientReadyState {
+   NONE,
+   INITIALIZING,
+   READY,
+}

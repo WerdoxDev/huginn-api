@@ -1,5 +1,5 @@
 import { APIUser, LoginCredentials, RegisterUser, Tokens } from "@shared/api-types";
-import { ClientOptions } from "../types";
+import { ClientOptions, ClientReadyState } from "../types";
 import { AuthAPI } from "../apis/auth";
 import { ChannelAPI } from "../apis/channel";
 import { CommonAPI } from "../apis/common";
@@ -24,6 +24,8 @@ export class HuginnClient {
 
    public user?: APIUser;
 
+   public readyState: ClientReadyState = ClientReadyState.NONE;
+
    constructor(options?: Partial<ClientOptions>) {
       const defaultOptions = createDefaultClientOptions();
 
@@ -45,40 +47,49 @@ export class HuginnClient {
 
    async initializeWithToken(tokens: Partial<Tokens>): Promise<void> {
       try {
+         this.readyState = ClientReadyState.INITIALIZING;
          if (tokens.token) {
             this.tokenHandler.token = tokens.token;
 
             this.user = await this.users.getCurrent();
+            this.readyState = ClientReadyState.READY;
          } else if (tokens.refreshToken) {
             const newTokens = await this.auth.refreshToken({ refreshToken: tokens.refreshToken });
             this.tokenHandler.refreshToken = newTokens.refreshToken;
             this.tokenHandler.token = newTokens.token;
 
             this.user = await this.users.getCurrent();
+            this.readyState = ClientReadyState.READY;
          }
       } catch (e) {
          this.user = undefined;
          this.tokenHandler.token = null!;
          this.tokenHandler.refreshToken = null!;
 
+         this.readyState = ClientReadyState.NONE;
+
          throw e;
       }
    }
 
    public async login(credentials: LoginCredentials): Promise<void> {
+      this.readyState = ClientReadyState.INITIALIZING;
       const result = await this.auth.login(credentials);
 
       this.user = { ...result };
       this.tokenHandler.token = result.token;
       this.tokenHandler.refreshToken = result.refreshToken;
+      this.readyState = ClientReadyState.READY;
    }
 
    public async register(user: RegisterUser): Promise<void> {
+      this.readyState = ClientReadyState.INITIALIZING;
       const result = await this.auth.register(user);
 
       this.user = { ...result };
       this.tokenHandler.token = result.token;
       this.tokenHandler.refreshToken = result.refreshToken;
+      this.readyState = ClientReadyState.INITIALIZING;
    }
 
    public async logout(): Promise<void> {
