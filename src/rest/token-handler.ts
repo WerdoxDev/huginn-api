@@ -4,7 +4,7 @@ import { decodeToken } from "../utils";
 export class TokenHandler {
    private _token?: string;
    private _refreshToken?: string;
-   private tokenTimeout?: Timer;
+   private tokenTimeout?: ReturnType<typeof setTimeout>;
    private timeoutPromise?: Promise<boolean>;
 
    private readonly client: HuginnClient;
@@ -35,7 +35,7 @@ export class TokenHandler {
       }
 
       const date1 = new Date();
-      const date2 = new Date((payload.exp || 0) * 1000);
+      const date2 = new Date((payload.exp ?? 0) * 1000);
       const diffTime = date2.getTime() - date1.getTime();
 
       this.startRefreshTimeout(diffTime - 5000);
@@ -63,7 +63,7 @@ export class TokenHandler {
     * Immidiatly returns a false if no timeout is in process
     */
    public async waitForTokenRefresh(): Promise<boolean> {
-      return (await this.timeoutPromise) || false;
+      return (await this.timeoutPromise) ?? false;
    }
 
    private startRefreshTimeout(time: number) {
@@ -73,7 +73,7 @@ export class TokenHandler {
 
       this.timeoutPromise = new Promise<boolean>((resolve) => {
          this.tokenTimeout = setTimeout(async () => {
-            const newTokens = await this.client.auth.refreshToken({ refreshToken: this.refreshToken || "" });
+            const newTokens = await this.client.auth.refreshToken({ refreshToken: this.refreshToken ?? "" });
 
             this.token = newTokens.token;
             this.refreshToken = newTokens.refreshToken;

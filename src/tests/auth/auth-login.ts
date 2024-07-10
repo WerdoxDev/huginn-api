@@ -1,16 +1,16 @@
 import { describe, expect, test } from "bun:test";
-import { HuginnClient } from "../client/huginn-client";
-import { LoginCredentials } from "@shared/client-types";
-import { testCredentials } from "./test-utils";
+import { LoginCredentials } from "@shared/api-types";
+import { getNewClient, testCredentials } from "../test-utils";
 
 describe("auth-login", () => {
-   test("auth-login-invalid-body", async () => {
-      const client = new HuginnClient();
-      expect(() => client.login({} as LoginCredentials)).toThrow();
+   test("auth-login-invalid", () => {
+      const client = getNewClient();
+
+      expect(() => client.login({} as LoginCredentials)).toThrow("Invalid Form Body");
    });
 
    test("auth-login-with-username", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       const user: LoginCredentials = {
          username: "test",
@@ -23,7 +23,7 @@ describe("auth-login", () => {
    });
 
    test("auth-login-with-email", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       const user: LoginCredentials = {
          email: "test@gmail.com",
@@ -36,7 +36,7 @@ describe("auth-login", () => {
    });
 
    test("auth-login-successful", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       await client.login(testCredentials);
 

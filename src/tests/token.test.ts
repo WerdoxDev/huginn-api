@@ -1,10 +1,9 @@
 import { describe, expect, test } from "bun:test";
-import { testCredentials } from "./test-utils";
-import { HuginnClient } from "..";
+import { getNewClient, testCredentials } from "./test-utils";
 
 describe("auth-token", () => {
    test("auth-refresh-token", async () => {
-      const client = new HuginnClient();
+      const client = getNewClient();
 
       expect(await client.tokenHandler.waitForTokenRefresh()).toBe(false);
 

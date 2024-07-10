@@ -1,10 +1,11 @@
-import { ClientOptions } from "@shared/client-types";
 import { ResponseLike } from "@shared/rest-types";
+import { TokenPayload } from "@shared/api-types";
 import * as jose from "jose";
-import { DefaultRestOptions } from "./rest/constants";
-import { TokenPayload } from "@shared/types";
+import { DefaultGatewayOptions } from "./gateway/constants";
+import { DefaultRestOptions } from "./rest/rest-utils";
+import { ClientOptions } from "./types";
 
-export async function parseResponse(response: ResponseLike): Promise<unknown> {
+export function parseResponse(response: ResponseLike): Promise<unknown> {
    if (response.headers.get("Content-Type")?.startsWith("application/json")) {
       return response.json();
    }
@@ -25,6 +26,7 @@ export function decodeToken(token: string): [boolean, (TokenPayload & jose.JWTPa
 export function createDefaultClientOptions(): ClientOptions {
    return {
       rest: { ...DefaultRestOptions },
-      intents: "",
+      gateway: { ...DefaultGatewayOptions },
+      intents: 0,
    };
 }

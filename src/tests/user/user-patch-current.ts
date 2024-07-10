@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { editCredentials, getLoggedClient } from "./test-utils";
+import { editCredentials, getLoggedClient } from "../test-utils";
 import { APIPatchCurrentUserJSONBody } from "@shared/api-types";
 
 describe("user-patch-current", () => {
@@ -7,53 +7,53 @@ describe("user-patch-current", () => {
       const client = await getLoggedClient();
 
       const edit: APIPatchCurrentUserJSONBody = {
-         displayName: "test2",
-         email: "test2@gmail.com",
-         username: "test2",
-         avatar: "test2-avatar",
-         newPassword: "test2",
+         displayName: "test-edited",
+         email: "test.edited@gmail.com",
+         username: "test-edited",
+         avatar: "test-edited-avatar",
+         newPassword: "test-edited",
          password: "test-incorrect",
       };
 
-      expect(() => client.users.edit(edit)).toThrow();
+      expect(() => client.users.edit(edit)).toThrow("Invalid Form Body");
    });
    test("user-patch-current-invalid-username-displayName", async () => {
       const client = await getLoggedClient();
 
       const edit: APIPatchCurrentUserJSONBody = {
          displayName: "t",
-         email: "test2@gmail.com",
+         email: "test.edited@gmail.com",
          username: "t",
-         avatar: "test2-avatar",
-         newPassword: "test2",
+         avatar: "test-edited-avatar",
+         newPassword: "test-edited",
          password: "test",
       };
 
-      expect(() => client.users.edit(edit)).toThrow();
+      expect(() => client.users.edit(edit)).toThrow("Invalid Form Body");
    });
    test("user-patch-current-invalid-email", async () => {
       const client = await getLoggedClient();
 
       const edit: APIPatchCurrentUserJSONBody = {
-         displayName: "test2",
+         displayName: "test-edited",
          email: "invalid",
-         username: "test2",
-         avatar: "test2-avatar",
-         newPassword: "test2",
+         username: "test-edited",
+         avatar: "test-edited-avatar",
+         newPassword: "test-edited",
          password: "test",
       };
 
-      expect(() => client.users.edit(edit)).toThrow();
+      expect(() => client.users.edit(edit)).toThrow("Invalid Form Body");
    });
    test("user-patch-current-successful", async () => {
       const client = await getLoggedClient();
 
       const result = await client.users.edit({
-         displayName: "test2",
-         email: "test2@gmail.com",
-         username: "test2",
-         avatar: "test2-avatar",
-         newPassword: "test2",
+         displayName: "test-edited",
+         email: "test-edited@gmail.com",
+         username: "test-edited",
+         avatar: "test-edited-avatar",
+         newPassword: "test-edited",
          password: "test",
       });
 
@@ -63,10 +63,10 @@ describe("user-patch-current", () => {
       const client = await getLoggedClient(editCredentials);
 
       const result = await client.users.edit({
-         email: "test3@gmail.com",
+         email: "test-edited-single@gmail.com",
       });
 
-      expect(result.email).toBe("test3@gmail.com");
+      expect(result.email).toBe("test-edited-single@gmail.com");
    });
    test("user-patch-current-revert-successful", async () => {
       const client = await getLoggedClient(editCredentials);
@@ -77,7 +77,7 @@ describe("user-patch-current", () => {
          username: "test",
          avatar: "test-avatar",
          newPassword: "test",
-         password: "test2",
+         password: "test-edited",
       });
 
       expect(result).toBeDefined();

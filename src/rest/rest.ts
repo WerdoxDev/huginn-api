@@ -1,30 +1,29 @@
+import { HuginnErrorData } from "@shared/errors";
 import {
    HandlerRequestData,
    InternalRequest,
-   RESTOptions,
    RequestData,
    RequestHeaders,
    RequestMethod,
    ResolvedRequest,
    ResponseLike,
 } from "@shared/rest-types";
-import { RouteLike } from "@shared/types";
-import { HuginnErrorData } from "@shared/errors";
+import { RouteLike } from "@shared/routes";
+import { HuginnClient } from "..";
+import { RESTOptions } from "../types";
 import { HTTPError } from "../errors/http-error";
 import { HuginnAPIError } from "../errors/huginn-error";
 import { parseResponse } from "../utils";
-import { DefaultRestOptions } from "./constants";
-import { TokenHandler } from "./token-handler";
+import { DefaultRestOptions } from "./rest-utils";
 
-// TODO: Implement put, patch, delete... requests
 export class REST {
    public readonly options: RESTOptions;
-   private tokenHandler: TokenHandler;
+   private client: HuginnClient;
 
-   public constructor(tokenHandler: TokenHandler, options: Partial<RESTOptions> = {}) {
+   public constructor(client: HuginnClient, options: Partial<RESTOptions> = {}) {
       this.options = { ...DefaultRestOptions, ...options };
 
-      this.tokenHandler = tokenHandler;
+      this.client = client;
    }
 
    /**
@@ -33,7 +32,7 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async get(fullRoute: RouteLike, options: RequestData = {}) {
+   public async get(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.GET });
    }
 
@@ -43,8 +42,18 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async post(fullRoute: RouteLike, options: RequestData = {}) {
+   public async post(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.POST });
+   }
+
+   /**
+    * Runs a PUT request from the api
+    *
+    * @param fullRoute - The full route to query
+    * @param options - Optional request options
+    */
+   public async put(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
+      return this.request({ ...options, fullRoute, method: RequestMethod.PUT });
    }
 
    /**
@@ -53,8 +62,18 @@ export class REST {
     * @param fullRoute - The full route to query
     * @param options - Optional request options
     */
-   public async patch(fullRoute: RouteLike, options: RequestData = {}) {
+   public async patch(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
       return this.request({ ...options, fullRoute, method: RequestMethod.PATCH });
+   }
+
+   /**
+    * Runs a DELETE request from the api
+    *
+    * @param fullRoute - The full route to query
+    * @param options - Optional request options
+    */
+   public async delete(fullRoute: RouteLike, options: RequestData = {}): Promise<unknown> {
+      return this.request({ ...options, fullRoute, method: RequestMethod.DELETE });
    }
 
    /**
@@ -62,8 +81,8 @@ export class REST {
     *
     * @param options - Request options
     */
-   public async request(options: InternalRequest) {
-      const { url, fetchOptions } = await this.resolveRequest(options);
+   public async request(options: InternalRequest): Promise<unknown> {
+      const { url, fetchOptions } = this.resolveRequest(options);
 
       const response = await this.options.makeRequest(url, fetchOptions);
 
@@ -77,7 +96,7 @@ export class REST {
     *
     * @param request - The request data
     */
-   public async resolveRequest(request: InternalRequest): Promise<ResolvedRequest> {
+   public resolveRequest(request: InternalRequest): ResolvedRequest {
       let query = "";
       let finalBody: RequestInit["body"];
       let additionalHeaders: Record<string, string> = {};
@@ -90,11 +109,11 @@ export class REST {
       const headers: RequestHeaders = {};
 
       if (request.auth) {
-         if (!this.tokenHandler.token) {
-            throw new Error("Expected token for a request, but wasn't present");
+         if (!this.client.tokenHandler.token) {
+            throw new Error("Expected token for a request, but wasn't present " + request.fullRoute);
          }
 
-         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.tokenHandler.token}`;
+         headers.Authorization = `${request.authPrefix ?? this.options.authPrefix} ${this.client.tokenHandler.token}`;
       }
 
       if (request.reason?.length) {
@@ -121,7 +140,12 @@ export class REST {
       return { url, fetchOptions };
    }
 
-   public async handleErrors(response: ResponseLike, method: string, url: string, requestData: HandlerRequestData) {
+   public async handleErrors(
+      response: ResponseLike,
+      method: string,
+      url: string,
+      requestData: HandlerRequestData
+   ): Promise<ResponseLike> {
       const status = response.status;
 
       if (status >= 500 && status < 600) {
@@ -131,12 +155,14 @@ export class REST {
       if (status >= 400 && status < 500) {
          // If we receive this status code, it means the token is not valid.
          if (status === 401 && requestData.auth) {
-            this.tokenHandler.token = null!;
+            console.log("fuck");
+            this.client.tokenHandler.token = null!;
+            this.client.user = undefined;
          }
 
          const data = (await parseResponse(response)) as HuginnErrorData;
-         // throw the API error
 
+         // throw the API error
          throw new HuginnAPIError(data, data.code, status, method, url, requestData);
       }
 

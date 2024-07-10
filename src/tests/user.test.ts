@@ -1,3 +1,3 @@
-import "./user-get-current";
-import "./user-get-by-id";
-import "./user-patch-current";
+import "./user/user-get-current";
+import "./user/user-get-by-id";
+import "./user/user-patch-current";
