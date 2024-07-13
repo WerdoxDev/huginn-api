@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { GatewayEvents, GatewayHeartbeat, GatewayHello, GatewayIdentify, GatewayOperations } from "@shared/gateway-types";
+import {
+   GatewayDispatch,
+   GatewayEvents,
+   GatewayHeartbeat,
+   GatewayHello,
+   GatewayIdentify,
+   GatewayOperations,
+   GatewayReadyDispatchData,
+   GatewayResume,
+} from "@shared/gateway-types";
+import { Snowflake } from "@shared/snowflake";
+import { isOpcode } from "@shared/utils";
 import EventEmitter from "eventemitter3";
 import { HuginnClient } from "..";
 import { GatewayOptions } from "../types";
 import { DefaultGatewayOptions } from "./constants";
-import { isDispatchOpcode, isHelloOpcode } from "./gateway-utils";
 
 export class Gateway {
    public readonly options: GatewayOptions;
@@ -13,7 +23,8 @@ export class Gateway {
 
    private socket?: WebSocket;
    private heartbeatInterval?: ReturnType<typeof setTimeout>;
-   private sequence: number | null;
+   private sequence?: number;
+   private sessionId?: Snowflake;
 
    private emit<EventName extends keyof GatewayEvents>(eventName: EventName, eventArg: GatewayEvents[EventName]): void {
       this.emitter.emit(eventName, eventArg);
@@ -30,8 +41,6 @@ export class Gateway {
    public constructor(client: HuginnClient, options: Partial<GatewayOptions> = {}) {
       this.options = { ...DefaultGatewayOptions, ...options };
       this.client = client;
-
-      this.sequence = null;
    }
 
    public connect(): void {
@@ -40,8 +49,6 @@ export class Gateway {
       }
 
       this.socket = this.options.createSocket(this.options.url);
-      this.sequence = null;
-
       this.startListening();
    }
 
@@ -67,6 +74,14 @@ export class Gateway {
       }
       this.stopHeartbeat();
       this.emit("close", e.code);
+
+      if (e.code === 1000) {
+         return;
+      }
+
+      setTimeout(() => {
+         this.connect();
+      }, 1000);
    }
 
    private onMessage(e: MessageEvent) {
@@ -77,39 +92,63 @@ export class Gateway {
 
       const data = JSON.parse(e.data);
 
-      if (isHelloOpcode(data)) {
+      // Hello
+      if (isOpcode<GatewayHello>(data, GatewayOperations.HELLO)) {
          if (this.options.identify) {
             this.handleHello(data);
          } else {
             this.emit("hello", data.d);
          }
-      } else if (isDispatchOpcode(data)) {
+         // Dispatch
+      } else if (isOpcode<GatewayDispatch>(data, GatewayOperations.DISPATCH)) {
+         this.sequence = data.s;
+         console.log(this.sequence);
+
+         if (data.t === "ready") {
+            this.sessionId = (data.d as GatewayReadyDispatchData).sessionId;
+         }
+
          this.emit(data.t, data.d);
       }
    }
 
    public close(): void {
-      this.socket?.close();
+      this.socket?.close(1000);
+      this.sequence = undefined;
+      this.sessionId = undefined;
    }
 
    private handleHello(data: GatewayHello) {
       this.startHeartbeat(data.d.heartbeatInterval);
 
-      const identifyData: GatewayIdentify = {
-         op: GatewayOperations.IDENTIFY,
-         d: {
-            token: this.client.tokenHandler.token!,
-            intents: this.client.options.intents,
-            properties: { os: "windows", browser: "idk", device: "idk" },
-         },
-      };
+      if (!this.sequence) {
+         const identifyData: GatewayIdentify = {
+            op: GatewayOperations.IDENTIFY,
+            d: {
+               token: this.client.tokenHandler.token!,
+               intents: this.client.options.intents,
+               properties: { os: "windows", browser: "idk", device: "idk" },
+            },
+         };
 
-      this.send(identifyData);
+         this.send(identifyData);
+      } else {
+         const resumeData: GatewayResume = {
+            op: GatewayOperations.RESUME,
+            d: {
+               token: this.client.tokenHandler.token!,
+               seq: this.sequence,
+               sessionId: this.sessionId!,
+            },
+         };
+
+         this.send(resumeData);
+      }
    }
 
    private startHeartbeat(interval: number) {
       this.heartbeatInterval = setInterval(() => {
-         const data: GatewayHeartbeat = { op: GatewayOperations.HEARTBEAT, d: this.sequence };
+         const data: GatewayHeartbeat = { op: GatewayOperations.HEARTBEAT, d: this.sequence ?? null };
          if (this.options.log) {
             console.log("Sending Heartbeat");
          }
