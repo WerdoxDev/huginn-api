@@ -102,7 +102,6 @@ export class Gateway {
          // Dispatch
       } else if (isOpcode<GatewayDispatch>(data, GatewayOperations.DISPATCH)) {
          this.sequence = data.s;
-         console.log(this.sequence);
 
          if (data.t === "ready") {
             this.sessionId = (data.d as GatewayReadyDispatchData).sessionId;

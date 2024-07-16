@@ -31,15 +31,15 @@ describe("message-create", () => {
 
          const channel = (await client.channels.getAll())[0];
 
-         const promise = new Promise((resolve) => {
+         async function createMessages() {
             for (let i = 0; i < 55; i++) {
-               client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
+               await client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
             }
 
-            resolve(true);
-         });
+            return true;
+         }
 
-         expect(() => promise).not.toThrow();
+         expect(createMessages).not.toThrow();
       },
       { timeout: 15000 }
    );
@@ -48,14 +48,14 @@ describe("message-create", () => {
 
       const channel = (await client.channels.getAll())[1];
 
-      const promise = new Promise((resolve) => {
+      async function createMessages() {
          for (let i = 0; i < 10; i++) {
-            client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
+            await client.channels.createMessage(channel.id, { content: "test" + (i + 1) });
          }
 
-         resolve(true);
-      });
+         return true;
+      }
 
-      expect(() => promise).not.toThrow();
+      expect(createMessages).not.toThrow();
    });
 });
