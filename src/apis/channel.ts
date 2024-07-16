@@ -41,9 +41,9 @@ export class ChannelAPI {
       return this.rest.get(Routes.channelMessages(channelId), {
          auth: true,
          query: new URLSearchParams({
-            limit: limit?.toString() ?? "",
-            before: before?.toString() ?? "",
-            after: after?.toString() ?? "",
+            ...(limit && { limit: limit.toString() }),
+            ...(before && { before: before.toString() }),
+            ...(after && { after: after.toString() }),
          }),
       }) as Promise<APIGetChannelMessagesResult>;
    }
